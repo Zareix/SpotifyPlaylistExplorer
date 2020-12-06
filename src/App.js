@@ -1,17 +1,9 @@
 import React, { Component } from "react";
 import * as $ from "jquery";
-import Player from "./Player";
 import logo from "./logo.svg";
+import { clientId, redirectUri, scopes, authEndpoint } from "./config"
 import "./App.css";
-
-export const authEndpoint = 'https://accounts.spotify.com/authorize';
-
-const clientId = "bb8294663827482097da97fd2897166c";
-const redirectUri = "http://localhost:3000";
-const scopes = [
-  "user-read-currently-playing",
-  "user-read-playback-state",
-];
+import Playlist from "./Playlist";
 
 // Get the hash of the url
 const hash = window.location.hash
@@ -32,21 +24,16 @@ class App extends Component {
     super();
     this.state = {
       token: null,
-      item: {
-        album: {
-          images: [{ url: "" }]
-        },
-        name: "",
-        artists: [{ name: "" }],
-        duration_ms: 0
-      },
-      is_playing: "Paused",
-      progress_ms: 0,
+      playlists: [{
+        id: "",
+        images: [{ url: "" }],
+        name: ""
+      }],
       no_data: false,
     };
 
-    this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
-    this.tick = this.tick.bind(this);
+    this.getAllPlaylist = this.getAllPlaylist.bind(this);
+    //this.tick = this.tick.bind(this);
   }
 
   componentDidMount() {
@@ -58,17 +45,11 @@ class App extends Component {
       this.setState({
         token: _token
       });
-      this.getCurrentlyPlaying(_token);
+      this.getAllPlaylist(_token);
     }
 
     // set interval for polling every 5 seconds
-    this.interval = setInterval(() => this.tick(), 5000);
-  }
-
-  tick() {
-    if (this.state.token) {
-      this.getCurrentlyPlaying(this.state.token);
-    }
+    //this.interval = setInterval(() => this.tick(), 5000);
   }
 
   componentWillUnmount() {
@@ -76,32 +57,25 @@ class App extends Component {
     clearInterval(this.interval);
   }
 
-  getCurrentlyPlaying(token) {
-    // Make a call using the token
+  getAllPlaylist(token) {
     $.ajax({
-      url: "https://api.spotify.com/v1/me/player",
+      url: "https://api.spotify.com/v1/me/playlists",
       type: "GET",
       beforeSend: xhr => {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
       },
       success: data => {
-        // Checks if the data is not empty
         if (!data) {
           this.setState({
-            no_data: true,
-          });
-          return;
+            no_data: true
+          })
+          return
         }
-
         this.setState({
-          item: data.item,
-          is_playing: data.is_playing,
-          progress_ms: data.progress_ms,
-          no_data: false /* We need to "reset" the boolean, in case the
-                            user does not give F5 and has opened his Spotify. */
-        });
+          playlists: data.items
+        })
       }
-    });
+    })
   }
 
   render() {
@@ -120,15 +94,18 @@ class App extends Component {
             </a>
           )}
           {this.state.token && !this.state.no_data && (
-            <Player
-              item={this.state.item}
-              is_playing={this.state.is_playing}
-              progress_ms={this.state.progress_ms}
-            />
-          )}
+            <div class="row">
+              <div class="col-md-4">
+                {this.state.playlists.map((playlist) => (
+                  <Playlist playlist={playlist}></Playlist>
+                ))}
+              </div>
+            </div>
+          )
+          }
           {this.state.no_data && (
             <p>
-              You need to be playing a song on Spotify, for something to appear here.
+              Vous n'avez aucune playlist
             </p>
           )}
         </header>
