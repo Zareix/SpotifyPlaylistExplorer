@@ -34,9 +34,9 @@ class PlaylistTracks extends React.Component {
     });
   }
 
+  // TODO : ListGroupItem -> Track component
   render() {
     return (
-      //TODO : finir affichage
       <ListGroup>
         {this.state.tracks.map((track) => (
           <ListGroupItem
