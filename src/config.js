@@ -1,5 +1,5 @@
-export const authEndpoint = process.env.REACT_APP_AUTH_ENDPOINT;
+export const authEndpoint = "https://accounts.spotify.com/authorize";
 
-export const clientId = process.env.REACT_APP_CLIENT_ID;
+export const clientId = "bb8294663827482097da97fd2897166c";
 export const redirectUri = process.env.REACT_APP_REDIRECT_URL;
-export const scopes = process.env.REACT_APP_SCOPES;
+export const scopes = ["playlist-read-private"];
