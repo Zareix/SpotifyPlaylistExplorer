@@ -44,7 +44,8 @@ class App extends Component {
     };
 
     this.getAllPlaylist = this.getAllPlaylist.bind(this);
-    this.tick = this.tick.bind(this);
+    this.choosePlaylist = this.choosePlaylist.bind(this);
+    //this.tick = this.tick.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +61,7 @@ class App extends Component {
     }
 
     // set interval for polling every 5 seconds
-    this.interval = setInterval(() => this.tick(), 1000);
+    //this.interval = setInterval(() => this.tick(), 1000);
   }
 
   componentWillUnmount() {
@@ -68,18 +69,18 @@ class App extends Component {
     clearInterval(this.interval);
   }
 
-  tick(){
+  tick() {
     this.setState(this.state, () => {
       this.state.playlists.pop();
-    })
+    });
   }
 
   getAllPlaylist(token) {
     $.ajax({
       url: "https://api.spotify.com/v1/me/playlists",
       type: "GET",
-      headers : {
-        'Authorization' : 'Bearer ' + token
+      headers: {
+        Authorization: "Bearer " + token,
       },
       /*
         beforeSend: (xhr) => {
@@ -101,9 +102,7 @@ class App extends Component {
   }
 
   choosePlaylist(playlistC) {
-    this.setState({
-      playlistChoosen: playlistC,
-    });
+    this.setState({ playlistChoosen: playlistC });
   }
 
   render() {
@@ -130,7 +129,7 @@ class App extends Component {
 
           {this.state.token &&
             !this.state.no_data &&
-            this.state.playlistChoosen === null && (
+            !this.state.playlistChoosen && (
               <ListGroup
                 className="row mx-auto border border-success mt-2 mb-2"
                 style={{ width: "70vw" }}
@@ -139,7 +138,7 @@ class App extends Component {
                   <Playlist
                     key={playlist.id}
                     playlist={playlist}
-                    buttonOnClick={this.choosePlaylist.bind(this)}
+                    buttonOnClick={this.choosePlaylist}
                   ></Playlist>
                 ))}
               </ListGroup>

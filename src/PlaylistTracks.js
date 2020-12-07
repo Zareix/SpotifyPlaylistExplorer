@@ -1,31 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
 import * as $ from "jquery";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 
-class PlaylistTracks extends Component {
-  constructor(playlist, token) {
-    super();
+class PlaylistTracks extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      token: token,
-      playlist: playlist,
-      tracks: [
-        {
-          href: "",
-          id: "",
-          name: "",
-          artists: [
-            {
-              id: "",
-              name: "",
-              genres: [],
-            },
-          ],
-        },
-      ],
+      tracks: [],
     };
+    this.getAllTracks = this.getAllTracks.bind(this);
   }
 
   componentDidMount() {
@@ -33,35 +20,44 @@ class PlaylistTracks extends Component {
   }
 
   getAllTracks() {
-    this.state.tracks.map((track) => {
-      $.ajax({
-        headers: {
-          Authorization: "Bearer " + this.state.token,
-        },
-        url: "",
-        type: "GET",
-        /*
-          beforeSend: (xhr) => {
-            xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
-           },
-        */
-        success: (data) => {
-					//TODO : recup tout les tracks
-					//TODO : recup le genre de chaque
-				},
-      });
+    $.ajax({
+      url: this.props.playlist.tracks.href,
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + this.props.token,
+      },
+      success: (data) => {
+        this.setState({
+          tracks: data.items,
+        });
+      },
     });
   }
 
   render() {
-    return ( //TODO : finir affichage
+    return (
+      //TODO : finir affichage
       <ListGroup>
-        {this.state.playlist.tracks.map((track) => {
-          <ListGroupItem key={track.id}></ListGroupItem>;
-        })}
+        {this.state.tracks.map((track) => (
+          <ListGroupItem
+            className="border-bottom border-success bg-dark"
+            key={track.track.id}
+          >
+            {track.track.name}
+          </ListGroupItem>
+        ))}
       </ListGroup>
     );
   }
 }
+
+PlaylistTracks.propTypes = {
+  playlist: {
+    tracks: {
+      href: PropTypes.string,
+    },
+  },
+  token: PropTypes.string,
+};
 
 export default PlaylistTracks;
