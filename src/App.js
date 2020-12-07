@@ -44,7 +44,7 @@ class App extends Component {
     };
 
     this.getAllPlaylist = this.getAllPlaylist.bind(this);
-    //this.tick = this.tick.bind(this);
+    this.tick = this.tick.bind(this);
   }
 
   componentDidMount() {
@@ -60,12 +60,18 @@ class App extends Component {
     }
 
     // set interval for polling every 5 seconds
-    //this.interval = setInterval(() => this.tick(), 5000);
+    this.interval = setInterval(() => this.tick(), 1000);
   }
 
   componentWillUnmount() {
     // clear the interval to save resources
     clearInterval(this.interval);
+  }
+
+  tick(){
+    this.setState(this.state, () => {
+      this.state.playlists.pop();
+    })
   }
 
   getAllPlaylist(token) {
@@ -127,10 +133,11 @@ class App extends Component {
             this.state.playlistChoosen === null && (
               <ListGroup
                 className="row mx-auto border border-success mt-2 mb-2"
-                style={{ width: "50%" }}
+                style={{ width: "70vw" }}
               >
                 {this.state.playlists.map((playlist) => (
                   <Playlist
+                    key={playlist.id}
                     playlist={playlist}
                     buttonOnClick={this.choosePlaylist.bind(this)}
                   ></Playlist>

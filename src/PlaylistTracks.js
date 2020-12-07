@@ -35,11 +35,11 @@ class PlaylistTracks extends Component {
   getAllTracks() {
     this.state.tracks.map((track) => {
       $.ajax({
-        url: "",
-        type: "GET",
         headers: {
           Authorization: "Bearer " + this.state.token,
         },
+        url: "",
+        type: "GET",
         /*
           beforeSend: (xhr) => {
             xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
