@@ -38,14 +38,18 @@ class PlaylistTracks extends React.Component {
     return (
       //TODO : finir affichage
       <ListGroup>
-        {this.state.tracks.map((track) => (
-          <ListGroupItem
-            className="border-bottom border-success bg-dark"
-            key={track.track.id}
-          >
-            {track.track.name}
-          </ListGroupItem>
-        ))}
+        {this.state.tracks.map((track) => {
+          console.log(track);
+          if(track.track){
+            return (<ListGroupItem
+              className="border-bottom border-success bg-dark"
+              key={track.track.id}
+            >
+              {track.track.name}
+            </ListGroupItem>);
+          }
+          return
+        })}
       </ListGroup>
     );
   }
