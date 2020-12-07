@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import * as $ from "jquery";
-import logo from "./logo.svg";
-import { clientId, redirectUri, scopes, authEndpoint } from "./config"
+
+import logo from "./spotifyLogo.svg";
+
+import Button from "react-bootstrap/Button";
+
+import { clientId, redirectUri, scopes, authEndpoint } from "./config";
 import "./App.css";
 import Playlist from "./Playlist";
+import PlaylistTracks from "./PlaylistTracks";
+
+import ListGroup from "react-bootstrap/ListGroup";
 
 // Get the hash of the url
 const hash = window.location.hash
@@ -24,12 +31,16 @@ class App extends Component {
     super();
     this.state = {
       token: null,
-      playlists: [{
-        id: "",
-        images: [{ url: "" }],
-        name: ""
-      }],
+      playlists: [
+        {
+          id: "",
+          images: [{ url: "" }],
+          name: "",
+          tracks: [],
+        },
+      ],
       no_data: false,
+      playlistChoosen: null,
     };
 
     this.getAllPlaylist = this.getAllPlaylist.bind(this);
@@ -43,7 +54,7 @@ class App extends Component {
     if (_token) {
       // Set token
       this.setState({
-        token: _token
+        token: _token,
       });
       this.getAllPlaylist(_token);
     }
@@ -61,53 +72,80 @@ class App extends Component {
     $.ajax({
       url: "https://api.spotify.com/v1/me/playlists",
       type: "GET",
-      beforeSend: xhr => {
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      headers : {
+        'Authorization' : 'Bearer ' + token
       },
-      success: data => {
+      /*
+        beforeSend: (xhr) => {
+          xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
+        },
+      */
+      success: (data) => {
         if (!data) {
           this.setState({
-            no_data: true
-          })
-          return
+            no_data: true,
+          });
+          return;
         }
         this.setState({
-          playlists: data.items
-        })
-      }
-    })
+          playlists: data.items,
+        });
+      },
+    });
+  }
+
+  choosePlaylist(playlistC) {
+    this.setState({
+      playlistChoosen: playlistC,
+    });
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img
+            src={logo}
+            className="App-logo mt-4 mb-2"
+            style={this.state.token && { height: "100px" }}
+            alt="logo"
+          />
+
           {!this.state.token && (
-            <a
-              className="btn btn--loginApp-link"
+            <Button
+              variant="success"
               href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
                 "%20"
               )}&response_type=token&show_dialog=true`}
             >
               Login to Spotify
-            </a>
+            </Button>
           )}
-          {this.state.token && !this.state.no_data && (
-            <div class="row">
-              <div class="col-md-4">
+
+          {this.state.token &&
+            !this.state.no_data &&
+            this.state.playlistChoosen === null && (
+              <ListGroup
+                className="row mx-auto border border-success mt-2 mb-2"
+                style={{ width: "50%" }}
+              >
                 {this.state.playlists.map((playlist) => (
-                  <Playlist playlist={playlist}></Playlist>
+                  <Playlist
+                    playlist={playlist}
+                    buttonOnClick={this.choosePlaylist.bind(this)}
+                  ></Playlist>
                 ))}
-              </div>
-            </div>
-          )
-          }
-          {this.state.no_data && (
-            <p>
-              Vous n'avez aucune playlist
-            </p>
+              </ListGroup>
+            )}
+
+          {this.state.playlistChoosen && (
+            <PlaylistTracks
+              playlist={this.state.playlistChoosen}
+              token={this.state.token}
+            ></PlaylistTracks>
           )}
+
+          {this.state.no_data && <p>Vous n'avez aucune playlist</p>}
         </header>
       </div>
     );
