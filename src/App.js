@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import * as $ from "jquery";
 
-import logo from "./spotifyLogo.svg";
-
 import Button from "react-bootstrap/Button";
 
 import { clientId, redirectUri, scopes, authEndpoint } from "./config";
 import "./App.css";
 import Playlist from "./Playlist";
 import PlaylistTracks from "./PlaylistTracks";
+import Logo from "./Logo";
 
 import ListGroup from "react-bootstrap/ListGroup";
 
@@ -101,20 +100,19 @@ class App extends Component {
     });
   }
 
-  choosePlaylist(playlistC) {
+  choosePlaylist = (playlistC) => {
     this.setState({ playlistChoosen: playlistC });
-  }
+  };
+
+  handleClickRetour = () => {
+    this.setState({ playlistChoosen: null });
+  };
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img
-            src={logo}
-            className="App-logo mt-4 mb-2"
-            style={this.state.token && { height: "100px" }}
-            alt="logo"
-          />
+          <Logo tokenIsSet={this.state.token ? true : false} />
 
           {!this.state.token && (
             <Button
@@ -130,25 +128,33 @@ class App extends Component {
           {this.state.token &&
             !this.state.no_data &&
             !this.state.playlistChoosen && (
-              <ListGroup
-                className="row mx-auto border border-bottom-0 border-success m-3 rounded"
-                style={{ width: "60vw" }}
-              >
-                {this.state.playlists.map((playlist) => (
-                  <Playlist
-                    key={playlist.id}
-                    playlist={playlist}
-                    buttonOnClick={this.choosePlaylist}
-                  ></Playlist>
-                ))}
-              </ListGroup>
+              <div className="row mx-auto border border-bottom-0 border-success m-3 rounded">
+                <ListGroup style={{ width: "60vw" }}>
+                  {this.state.playlists.map((playlist) => (
+                    <Playlist
+                      key={playlist.id}
+                      playlist={playlist}
+                      buttonOnClick={this.choosePlaylist}
+                    ></Playlist>
+                  ))}
+                </ListGroup>
+              </div>
             )}
-          {/*TODO : Add return button*/}
+
           {this.state.playlistChoosen && (
-            <PlaylistTracks
-              playlist={this.state.playlistChoosen}
-              token={this.state.token}
-            ></PlaylistTracks>
+            <div className="mb-4 col-7">
+              <Button
+                className="m-3"
+                variant="secondary"
+                onClick={this.handleClickRetour}
+              >
+                Retour
+              </Button>
+              <PlaylistTracks
+                playlist={this.state.playlistChoosen}
+                token={this.state.token}
+              ></PlaylistTracks>
+            </div>
           )}
 
           {this.state.no_data && <p>Vous n'avez aucune playlist</p>}

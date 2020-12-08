@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 import * as $ from "jquery";
 
 import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
+import { Spring } from "react-spring/renderprops";
+
+import Track from "./Track";
+
 
 class PlaylistTracks extends React.Component {
   constructor(props) {
@@ -37,20 +40,19 @@ class PlaylistTracks extends React.Component {
   // TODO : ListGroupItem -> Track component
   render() {
     return (
-      <ListGroup>
-        {this.state.tracks.map((track) => {
-          console.log(track);
-          if(track.track){
-            return (<ListGroupItem
-              className="border-bottom border-success bg-dark"
-              key={track.track.id}
-            >
-              {track.track.name}
-            </ListGroupItem>);
-          }
-          return
-        })}
-      </ListGroup>
+      <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+        {props => <ListGroup style={props}>
+          {this.state.tracks.map((track) => {
+            if (track.track) {
+              return (
+                <Track track={track.track}>
+                </Track>
+              );
+            }
+            return;
+          })}
+        </ListGroup>}
+      </Spring>
     );
   }
 }
