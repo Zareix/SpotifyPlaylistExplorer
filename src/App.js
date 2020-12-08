@@ -128,7 +128,7 @@ class App extends Component {
           {this.state.token &&
             !this.state.no_data &&
             !this.state.playlistChoosen && (
-              <div className="row mx-auto border border-bottom-0 border-success m-3 rounded">
+              <div className="row mx-auto m-3 rounded">
                 <ListGroup style={{ width: "60vw" }}>
                   {this.state.playlists.map((playlist) => (
                     <Playlist
