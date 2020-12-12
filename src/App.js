@@ -10,6 +10,7 @@ import PlaylistTracks from "./PlaylistTracks";
 import Logo from "./Logo";
 
 import ListGroup from "react-bootstrap/ListGroup";
+import ScrollButton from "./ScrollButton";
 
 // Get the hash of the url
 const hash = window.location.hash
@@ -113,6 +114,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <Logo tokenIsSet={this.state.token ? true : false} />
+          <ScrollButton/>
 
           {!this.state.token && (
             <Button

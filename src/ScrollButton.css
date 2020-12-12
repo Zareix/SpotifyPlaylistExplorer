@@ -1,0 +1,17 @@
+.scrollButton {
+  text-decoration: none;
+  position: fixed;
+  bottom: 40px;
+  align-items: center;
+  left : 95%;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.scrollButtonH{
+    opacity : 0.5;
+}
+
+.scrollButtonH:hover {
+  opacity: 1;
+}
