@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { FaArrowCircleUp } from "react-icons/fa";
-import { useSpring, config } from "react-spring";
 import { Transition } from "react-spring/renderprops";
 
 import "./ScrollButton.css";
@@ -21,15 +20,6 @@ const ScrollButton = () => {
   };
   window.addEventListener("scroll", checkScrollTop); // Lance checkScrollTop quand le scroll change
 
-  // Spring pour scroll au top
-  const [, scrollTop] = useSpring(() => ({
-    immediate: true,
-    config: config.slow,
-    onFrame: () => {
-      window.scroll(window.pageYOffset, 0);
-    },
-  }));
-
   return (
     <div className="scrollButtonH">
       <Transition
@@ -44,10 +34,10 @@ const ScrollButton = () => {
             <div style={props} className="scrollButton">
               <FaArrowCircleUp
                 onClick={() => {
-                  scrollTop();
+                  window.scrollTo(0, 0, "smooth");
                 }}
                 size={30}
-                />
+              />
             </div>
           ))
         }
