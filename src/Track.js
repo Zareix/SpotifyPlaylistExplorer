@@ -5,6 +5,8 @@ import * as $ from "jquery";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
+import { Spring } from "react-spring/renderprops";
+
 import "./Track.css";
 
 const Track = ({ track, token }) => {
@@ -28,26 +30,26 @@ const Track = ({ track, token }) => {
   });
 
   return (
-    <ListGroupItem className="border border-success bg-dark">
-      <div className="d-flex justify-content-center">
-        <div>{track.artists[0].name}</div>
-        <div class="fw-bold">&nbsp;- {track.name}</div>
-      </div>
-      <div>
-        {genres && genres.length > 0 && (
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              Genres
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {genres.map((genre) => {
-                return <Dropdown.Item>{genre}</Dropdown.Item>;
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
-        )}
-      </div>
-    </ListGroupItem>
+        <ListGroupItem className="border border-success bg-dark">
+          <div className="d-flex justify-content-center">
+            <div>{track.artists[0].name}</div>
+            <div class="fw-bold">&nbsp;- {track.name}</div>
+          </div>
+          <div>
+            {genres && genres.length > 0 && (
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  Genres
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {genres.map((genre) => {
+                    return <Dropdown.Item>{genre}</Dropdown.Item>;
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </div>
+        </ListGroupItem>
   );
 };
 

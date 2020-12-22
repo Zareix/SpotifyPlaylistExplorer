@@ -41,24 +41,20 @@ class PlaylistTracks extends React.Component {
   render() {
     return (
       <div>
-        <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
-          {(props) => (
-            <ListGroup style={props}>
-              {this.state.tracks.map((track) => {
-                if (track.track) {
-                  return (
-                    <Track
-                      track={track.track}
-                      token={this.props.token}
-                      key={track.track.id}
-                    ></Track>
-                  );
-                }
-                return null;
-              })}
-            </ListGroup>
-          )}
-        </Spring>
+        <ListGroup>
+          {this.state.tracks.map((track) => {
+            if (track.track) {
+              return (
+                <Track
+                  track={track.track}
+                  token={this.props.token}
+                  key={track.track.id}
+                ></Track>
+              );
+            }
+            return null;
+          })}
+        </ListGroup>
       </div>
     );
   }
