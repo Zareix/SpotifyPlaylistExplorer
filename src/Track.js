@@ -5,7 +5,7 @@ import * as $ from "jquery";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
-import { useSpring, animated } from "react-spring";
+import { useSpring, animated, config } from "react-spring";
 
 import "./Track.css";
 
@@ -16,6 +16,7 @@ const Track = ({ track, token }) => {
   const spring = useSpring({
     opacity: 1,
     from: { opacity: 0 },
+    config: config.gentle
   });
 
   const AnimatedItem = animated(ListGroupItem);
