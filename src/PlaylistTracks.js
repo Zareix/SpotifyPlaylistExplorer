@@ -37,22 +37,11 @@ class PlaylistTracks extends React.Component {
     });
   }
 
-  loaded = () => {
-    if (!this.state.loaded) {
-      this.setState({ loaded: true  });
-    }
-  };
-
+  // Loading
   render() {
     return (
       <div>
-        {!this.state.loaded && <div>Loading</div>}
-        <Spring
-          from={{ opacity: !this.state.loaded ? 0 : 0.5 }}
-          to={{ opacity: !this.state.loaded ? 0.5 : 1 }}
-          onRest={this.loaded}
-          reset={this.state.loaded}
-        >
+        <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
           {(props) => (
             <ListGroup style={props}>
               {this.state.tracks.map((track) => {
