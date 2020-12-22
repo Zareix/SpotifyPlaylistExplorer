@@ -13,6 +13,7 @@ class PlaylistTracks extends React.Component {
     super(props);
     this.state = {
       tracks: [],
+      loaded: false,
     };
     this.getAllTracks = this.getAllTracks.bind(this);
   }
@@ -36,20 +37,40 @@ class PlaylistTracks extends React.Component {
     });
   }
 
+  loaded = () => {
+    if (!this.state.loaded) {
+      this.setState({ loaded: true  });
+    }
+  };
+
   render() {
     return (
-      <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
-        {(props) => (
-          <ListGroup style={props}>
-            {this.state.tracks.map((track) => {
-              if (track.track) {
-                return <Track track={track.track} token={this.props.token}></Track>;
-              }
-              return null;
-            })}
-          </ListGroup>
-        )}
-      </Spring>
+      <div>
+        {!this.state.loaded && <div>Loading</div>}
+        <Spring
+          from={{ opacity: !this.state.loaded ? 0 : 0.5 }}
+          to={{ opacity: !this.state.loaded ? 0.5 : 1 }}
+          onRest={this.loaded}
+          reset={this.state.loaded}
+        >
+          {(props) => (
+            <ListGroup style={props}>
+              {this.state.tracks.map((track) => {
+                if (track.track) {
+                  return (
+                    <Track
+                      track={track.track}
+                      token={this.props.token}
+                      key={track.track.id}
+                    ></Track>
+                  );
+                }
+                return null;
+              })}
+            </ListGroup>
+          )}
+        </Spring>
+      </div>
     );
   }
 }
