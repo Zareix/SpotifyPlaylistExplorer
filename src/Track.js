@@ -5,11 +5,20 @@ import * as $ from "jquery";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
+import { useSpring, animated } from "react-spring";
+
 import "./Track.css";
 
 const Track = ({ track, token }) => {
   const [genres, setGenres] = useState();
   const [genresIsInited, genresInit] = useState(false);
+
+  const spring = useSpring({
+    opacity: 1,
+    from: { opacity: 0 },
+  });
+
+  const AnimatedItem = animated(ListGroupItem);
 
   useEffect(() => {
     if (!genresIsInited) {
@@ -31,26 +40,28 @@ const Track = ({ track, token }) => {
   return (
     <div>
       {genresIsInited && (
-        <ListGroupItem className="border border-success bg-dark">
-          <div className="d-flex justify-content-center">
-            <div>{track.artists[0].name}</div>
-            <div class="fw-bold">&nbsp;- {track.name}</div>
-          </div>
-          <div>
-            {genres && genres.length > 0 && (
-              <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  Genres
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {genres.map((genre) => {
-                    return <Dropdown.Item>{genre}</Dropdown.Item>;
-                  })}
-                </Dropdown.Menu>
-              </Dropdown>
-            )}
-          </div>
-        </ListGroupItem>
+        <animated.div style={spring}>
+          <ListGroupItem className="border border-success bg-dark">
+            <div className="d-flex justify-content-center">
+              <div>{track.artists[0].name}</div>
+              <div class="fw-bold">&nbsp;- {track.name}</div>
+            </div>
+            <div>
+              {genres && genres.length > 0 && (
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Genres
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {genres.map((genre) => {
+                      return <Dropdown.Item>{genre}</Dropdown.Item>;
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
+            </div>
+          </ListGroupItem>
+        </animated.div>
       )}
     </div>
   );
