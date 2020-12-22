@@ -5,8 +5,6 @@ import * as $ from "jquery";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
-import { Spring } from "react-spring/renderprops";
-
 import "./Track.css";
 
 const Track = ({ track, token }) => {
@@ -29,7 +27,10 @@ const Track = ({ track, token }) => {
     }
   });
 
+  // TODO : Animation
   return (
+    <div>
+      {genresIsInited && (
         <ListGroupItem className="border border-success bg-dark">
           <div className="d-flex justify-content-center">
             <div>{track.artists[0].name}</div>
@@ -50,6 +51,8 @@ const Track = ({ track, token }) => {
             )}
           </div>
         </ListGroupItem>
+      )}
+    </div>
   );
 };
 
