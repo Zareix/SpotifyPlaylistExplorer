@@ -38,28 +38,34 @@ class PlaylistTracks extends React.Component {
   }
 
   getAllGenres() {
-    var requestLink = "https://api.spotify.com/v1/artists?ids=";
-    requestLink += this.state.tracks[0].track.artists[0].id;
-    for (let i = 1; i < this.state.tracks.length; i++) {
-      requestLink += "," + this.state.tracks[i].track.artists[0].id;
+    var cpt = 0;
+    while (cpt < this.state.tracks.length) {
+      var depart = cpt;
+      var requestLink = "https://api.spotify.com/v1/artists?ids=";
+      do {
+        requestLink += this.state.tracks[cpt].track.artists[0].id + ",";
+        cpt++;
+      } while (cpt < this.state.tracks.length && cpt % 49 !== 0);
+      requestLink = requestLink.slice(0, requestLink.length - 1);
+
+      $.ajax({
+        async : false,
+        url: requestLink,
+        type: "GET",
+        headers: {
+          Authorization: "Bearer " + this.props.token,
+        },
+        success: (data) => {
+          var tracksUpdated = this.state.tracks;
+          for (let i = depart; i < (depart + data.artists.length); i++) {
+            tracksUpdated[i].track.genres = data.artists[i - depart].genres;
+          }
+          this.setState({
+            tracks: tracksUpdated,
+          });
+        },
+      });
     }
-    console.log(requestLink);
-    $.ajax({
-      url: requestLink,
-      type: "GET",
-      headers: {
-        Authorization: "Bearer " + this.props.token,
-      },
-      success: (data) => {
-        var tracksUpdated = this.state.tracks;
-        for (let i = 0; i < data.artists.length; i++) {
-          tracksUpdated[i].track.genres = data.artists[i].genres;
-        }
-        this.setState({
-          tracks: tracksUpdated,
-        });
-      },
-    });
   }
 
   // TODO : Loading

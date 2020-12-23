@@ -11,7 +11,6 @@ class Track extends React.Component {
     this.state = {
       track : props.track
     }
-    console.log(this.state.track)
   }
 
   componentWillReceiveProps (nextProps) {
