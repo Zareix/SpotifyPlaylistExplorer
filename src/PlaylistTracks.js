@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import * as $ from "jquery";
 
@@ -84,14 +83,5 @@ class PlaylistTracks extends React.Component {
     );
   }
 }
-
-PlaylistTracks.propTypes = {
-  playlist: {
-    tracks: {
-      href: PropTypes.string,
-    },
-  },
-  token: PropTypes.string,
-};
 
 export default PlaylistTracks;
