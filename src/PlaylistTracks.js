@@ -75,7 +75,7 @@ class PlaylistTracks extends React.Component {
         <ListGroup>
           {this.state.tracks.map((track) => {
             if (track.track) {
-              return <Track track={track.track}></Track>;
+              return <Track track={track.track} key={track.track.id}></Track>;
             }
             return null;
           })}
