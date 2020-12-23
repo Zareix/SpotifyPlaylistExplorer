@@ -12,17 +12,18 @@ class PlaylistTracks extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      loaded: false,
     };
     this.getAllTracks = this.getAllTracks.bind(this);
   }
 
   componentDidMount() {
-    this.getAllTracks();
+    this.getAllTracks().then(() => {
+      this.getAllGenres();
+    });
   }
 
-  getAllTracks() {
-    $.ajax({
+  async getAllTracks() {
+    await $.ajax({
       url: this.props.playlist.tracks.href,
       type: "GET",
       headers: {
@@ -35,7 +36,32 @@ class PlaylistTracks extends React.Component {
       },
     });
   }
-  
+
+  getAllGenres() {
+    var requestLink = "https://api.spotify.com/v1/artists?ids=";
+    requestLink += this.state.tracks[0].track.artists[0].id;
+    for (let i = 1; i < this.state.tracks.length; i++) {
+      requestLink += "," + this.state.tracks[i].track.artists[0].id;
+    }
+    console.log(requestLink);
+    $.ajax({
+      url: requestLink,
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + this.props.token,
+      },
+      success: (data) => {
+        var tracksUpdated = this.state.tracks;
+        for (let i = 0; i < data.artists.length; i++) {
+          tracksUpdated[i].track.genres = data.artists[i].genres;
+        }
+        this.setState({
+          tracks: tracksUpdated,
+        });
+      },
+    });
+  }
+
   // TODO : Loading
   render() {
     return (
@@ -43,13 +69,7 @@ class PlaylistTracks extends React.Component {
         <ListGroup>
           {this.state.tracks.map((track) => {
             if (track.track) {
-              return (
-                <Track
-                  track={track.track}
-                  token={this.props.token}
-                  key={track.track.id}
-                ></Track>
-              );
+              return <Track track={track.track}></Track>;
             }
             return null;
           })}

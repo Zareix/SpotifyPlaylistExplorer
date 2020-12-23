@@ -1,72 +1,61 @@
-import React, { useState, useEffect } from "react";
-
-import * as $ from "jquery";
+import React from "react";
 
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import "./Track.css";
 
-const Track = ({ track, token }) => {
-  const [genres, setGenres] = useState();
-  const [genresIsInited, genresInit] = useState(false);
-
-  useEffect(() => {
-    if (!genresIsInited) {
-      $.ajax({
-        url: track.artists[0].href,
-        type: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-        success: (data) => {
-          setGenres(data.genres);
-          genresInit(true);
-        },
-      });
+class Track extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      track : props.track
     }
-  });
+    console.log(this.state.track)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({ track: nextProps.track });
+  }
 
   // TODO : Animation
-  return (
-    <div>
-      {genresIsInited && (
-        <ListGroupItem className="border border-success bg-dark">
-          <div className="d-flex justify-content-center">
-            <div>
-              {track.artists.map((artist) => {
-                return (
-                  <span>
-                    {track.artists.length - 1 ===
-                    track.artists.indexOf(artist) ? (
-                      <span>{artist.name} </span>
-                    ) : (
-                      <span>{artist.name}, </span>
-                    )}
-                  </span>
-                );
-              })}
-              <span class="fw-bold">- {track.name}</span>
-            </div>
-          </div>
+  render() {
+    return (
+      <ListGroupItem className="border border-success bg-dark" key={this.state.track.id}>
+        <div className="d-flex justify-content-center">
           <div>
-            {genres && genres.length > 0 && (
-              <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  Genres
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {genres.map((genre) => {
-                    return <Dropdown.Item>{genre}</Dropdown.Item>;
-                  })}
-                </Dropdown.Menu>
-              </Dropdown>
-            )}
+            {this.state.track.artists.map((artist) => {
+              return (
+                <span>
+                  {this.state.track.artists.length - 1 ===
+                  this.state.track.artists.indexOf(artist) ? (
+                    <span>{artist.name} </span>
+                  ) : (
+                    <span>{artist.name}, </span>
+                  )}
+                </span>
+              );
+            })}
+            <span class="fw-bold">- {this.state.track.name}</span>
           </div>
-        </ListGroupItem>
-      )}
-    </div>
-  );
-};
+        </div>
+        <div>
+          {this.state.track.genres && this.state.track.genres.length > 0 && (
+            <Dropdown>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Genres
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {this.state.track.genres.map((genre) => {
+                  return <Dropdown.Item>{genre}</Dropdown.Item>;
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
+        </div>
+      </ListGroupItem>
+    );
+  }
+}
 
 export default Track;
