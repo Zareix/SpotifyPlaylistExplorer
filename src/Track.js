@@ -5,21 +5,11 @@ import * as $ from "jquery";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
-import { useSpring, animated, config } from "react-spring";
-
 import "./Track.css";
 
 const Track = ({ track, token }) => {
   const [genres, setGenres] = useState();
   const [genresIsInited, genresInit] = useState(false);
-
-  const spring = useSpring({
-    opacity: 1,
-    from: { opacity: 0 },
-    config: config.gentle
-  });
-
-  const AnimatedItem = animated(ListGroupItem);
 
   useEffect(() => {
     if (!genresIsInited) {
@@ -41,7 +31,6 @@ const Track = ({ track, token }) => {
   return (
     <div>
       {genresIsInited && (
-        <animated.div style={spring}>
           <ListGroupItem className="border border-success bg-dark">
             <div className="d-flex justify-content-center">
               <div>{track.artists[0].name}</div>
@@ -62,7 +51,6 @@ const Track = ({ track, token }) => {
               )}
             </div>
           </ListGroupItem>
-        </animated.div>
       )}
     </div>
   );
