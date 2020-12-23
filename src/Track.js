@@ -31,26 +31,39 @@ const Track = ({ track, token }) => {
   return (
     <div>
       {genresIsInited && (
-          <ListGroupItem className="border border-success bg-dark">
-            <div className="d-flex justify-content-center">
-              <div>{track.artists[0].name}</div>
-              <div class="fw-bold">&nbsp;- {track.name}</div>
-            </div>
+        <ListGroupItem className="border border-success bg-dark">
+          <div className="d-flex justify-content-center">
             <div>
-              {genres && genres.length > 0 && (
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    Genres
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {genres.map((genre) => {
-                      return <Dropdown.Item>{genre}</Dropdown.Item>;
-                    })}
-                  </Dropdown.Menu>
-                </Dropdown>
-              )}
+              {track.artists.map((artist) => {
+                return (
+                  <span>
+                    {track.artists.length - 1 ===
+                    track.artists.indexOf(artist) ? (
+                      <span>{artist.name} </span>
+                    ) : (
+                      <span>{artist.name}, </span>
+                    )}
+                  </span>
+                );
+              })}
+              <span class="fw-bold">- {track.name}</span>
             </div>
-          </ListGroupItem>
+          </div>
+          <div>
+            {genres && genres.length > 0 && (
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  Genres
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {genres.map((genre) => {
+                    return <Dropdown.Item>{genre}</Dropdown.Item>;
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </div>
+        </ListGroupItem>
       )}
     </div>
   );
