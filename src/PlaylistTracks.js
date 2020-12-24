@@ -3,6 +3,7 @@ import React from "react";
 import * as $ from "jquery";
 
 import ListGroup from "react-bootstrap/ListGroup";
+import Button from "react-bootstrap/Button";
 
 import Track from "./Track";
 
@@ -11,6 +12,7 @@ class PlaylistTracks extends React.Component {
     super(props);
     this.state = {
       tracks: [],
+      genreSelected: "",
     };
     this.getAllTracks = this.getAllTracks.bind(this);
   }
@@ -48,7 +50,7 @@ class PlaylistTracks extends React.Component {
       requestLink = requestLink.slice(0, requestLink.length - 1);
 
       $.ajax({
-        async : false,
+        async: false,
         url: requestLink,
         type: "GET",
         headers: {
@@ -56,7 +58,7 @@ class PlaylistTracks extends React.Component {
         },
         success: (data) => {
           var tracksUpdated = this.state.tracks;
-          for (let i = depart; i < (depart + data.artists.length); i++) {
+          for (let i = depart; i < depart + data.artists.length; i++) {
             tracksUpdated[i].track.genres = data.artists[i - depart].genres;
           }
           this.setState({
@@ -67,14 +69,39 @@ class PlaylistTracks extends React.Component {
     }
   }
 
+  selectGenre = (genre) => {
+    this.setState({
+      genreSelected: genre,
+    });
+  };
+
   // TODO : Loading
   render() {
     return (
       <div>
+        {this.state.genreSelected !== "" && (
+          <div>
+            <Button
+              onClick={() => this.selectGenre("")}
+              className="mb-2"
+              variant="danger"
+            >
+              Deselect Genre
+            </Button>
+            <p> Genre choisi : {this.state.genreSelected}</p>
+          </div>
+        )}
         <ListGroup>
           {this.state.tracks.map((track) => {
             if (track.track) {
-              return <Track track={track.track} key={track.track.id}></Track>;
+              return (
+                <Track
+                  key={track.track.id}
+                  track={track.track}
+                  genreSelected={this.state.genreSelected}
+                  selectGenre={this.selectGenre}
+                ></Track>
+              );
             }
             return null;
           })}
