@@ -76,7 +76,7 @@ class PlaylistTracks extends React.Component {
 
   selectGenre = (genre) => {
     this.setState({
-      genreSelected: genre,
+      genreSelected: genre, 
     });
   };
 
