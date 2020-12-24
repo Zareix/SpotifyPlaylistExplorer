@@ -6,6 +6,10 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 
 import Track from "./Track";
+import Dropdown from "react-bootstrap/Dropdown";
+
+const electro = ["edm", "electro", "house", "dance", "room"];
+const latino = ["latino", "funk", "reggaeton", "hip hop tuga"]
 
 class PlaylistTracks extends React.Component {
   constructor(props) {
@@ -13,6 +17,7 @@ class PlaylistTracks extends React.Component {
     this.state = {
       tracks: [],
       genreSelected: "",
+      genresToSelect: [electro, latino],
     };
     this.getAllTracks = this.getAllTracks.bind(this);
   }
@@ -79,16 +84,34 @@ class PlaylistTracks extends React.Component {
   render() {
     return (
       <div>
-        {this.state.genreSelected !== "" && (
+        {this.state.genreSelected !== "" ? (
           <div>
             <Button
               onClick={() => this.selectGenre("")}
               className="mb-2"
               variant="danger"
             >
-              Deselect Genre
+              Deselectionner le genre
             </Button>
             <p> Genre choisi : {this.state.genreSelected}</p>
+          </div>
+        ) : (
+          <div>
+            <Dropdown className="mb-2">
+              <Dropdown.Toggle variant="success">Selectionner un genre</Dropdown.Toggle>
+              <Dropdown.Menu>
+                {this.state.genresToSelect.map((genre, index) => {
+                  return (
+                    <Dropdown.Item
+                      onClick={() => this.selectGenre(genre[0])}
+                      key={index}
+                    >
+                      {genre[0]}
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         )}
         <ListGroup>
