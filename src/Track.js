@@ -76,6 +76,7 @@ const Track = (props) => {
   var response = props.track.genres.map((genre) => {
     var rep = props.genresSelected.map((g) => {
       if (genre.includes(g)) return true;
+      return false
     });
     return rep.includes(true);
   });
