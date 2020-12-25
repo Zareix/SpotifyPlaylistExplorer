@@ -43,7 +43,7 @@ class PlaylistTracks extends React.Component {
     });
   }
 
-  getAllGenres() {
+  async getAllGenres() {
     var cpt = 0;
     while (cpt < this.state.tracks.length) {
       var depart = cpt;
@@ -54,8 +54,7 @@ class PlaylistTracks extends React.Component {
       } while (cpt < this.state.tracks.length && cpt % 49 !== 0);
       requestLink = requestLink.slice(0, requestLink.length - 1);
 
-      $.ajax({
-        async: false,
+       await $.ajax({
         url: requestLink,
         type: "GET",
         headers: {
