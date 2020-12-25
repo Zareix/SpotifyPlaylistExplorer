@@ -46,6 +46,7 @@ class PlaylistTracks extends React.Component {
   async getAllGenres() {
     var cpt = 0;
     while (cpt < this.state.tracks.length) {
+      // var cptD = cpt
       this.setState({
         cptD : cpt
       })
