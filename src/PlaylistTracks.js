@@ -49,7 +49,8 @@ class PlaylistTracks extends React.Component {
       var depart = cpt;
       var requestLink = "https://api.spotify.com/v1/artists?ids=";
       do {
-        requestLink += this.state.tracks[cpt].track.artists[0].id + ",";
+        if(this.state.tracks[cpt].track)
+          requestLink += this.state.tracks[cpt].track.artists[0].id + ",";
         cpt++;
       } while (cpt < this.state.tracks.length && cpt % 49 !== 0);
       requestLink = requestLink.slice(0, requestLink.length - 1);
