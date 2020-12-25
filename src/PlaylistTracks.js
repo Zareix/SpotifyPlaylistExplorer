@@ -16,7 +16,7 @@ class PlaylistTracks extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      genreSelected: "",
+      genresSelected: [],
       genresToSelect: [electro, latino],
     };
     this.getAllTracks = this.getAllTracks.bind(this);
@@ -76,7 +76,7 @@ class PlaylistTracks extends React.Component {
 
   selectGenre = (genre) => {
     this.setState({
-      genreSelected: genre, 
+      genresSelected: genre, 
     });
   };
 
@@ -84,7 +84,7 @@ class PlaylistTracks extends React.Component {
   render() {
     return (
       <div>
-        {this.state.genreSelected !== "" ? (
+        {this.state.genresSelected !== "" ? (
           <div>
             <Button
               onClick={() => this.selectGenre("")}
@@ -93,7 +93,7 @@ class PlaylistTracks extends React.Component {
             >
               Deselectionner le genre
             </Button>
-            <p> Genre choisi : {this.state.genreSelected}</p>
+            <p> Genre choisi : {this.state.genresSelected[0]}</p>
           </div>
         ) : (
           <div>
@@ -103,7 +103,7 @@ class PlaylistTracks extends React.Component {
                 {this.state.genresToSelect.map((genre, index) => {
                   return (
                     <Dropdown.Item
-                      onClick={() => this.selectGenre(genre[0])}
+                      onClick={() => this.selectGenre(genre)}
                       key={index}
                     >
                       {genre[0]}
@@ -121,7 +121,7 @@ class PlaylistTracks extends React.Component {
                 <Track
                   key={track.track.id}
                   track={track.track}
-                  genreSelected={this.state.genreSelected}
+                  genresSelected={this.state.genresSelected}
                   selectGenre={this.selectGenre}
                 ></Track>
               );
