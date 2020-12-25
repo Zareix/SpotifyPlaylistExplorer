@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 import Track from "./Track";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const electro = ["edm", "electro", "house", "dance", "room"];
+const electro = ["edm", "electro", "house", "dance", "room", "dubstep", "bass", "trap", "bounce", "brostep"];
 const latino = ["latino", "funk", "reggaeton", "hip hop tuga"]
 
 class PlaylistTracks extends React.Component {
@@ -84,7 +84,7 @@ class PlaylistTracks extends React.Component {
   render() {
     return (
       <div>
-        {this.state.genresSelected !== "" ? (
+        {this.state.genresSelected.length !== 0 ? (
           <div>
             <Button
               onClick={() => this.selectGenre("")}
