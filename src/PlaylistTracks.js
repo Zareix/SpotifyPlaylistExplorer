@@ -46,7 +46,9 @@ class PlaylistTracks extends React.Component {
   async getAllGenres() {
     var cpt = 0;
     while (cpt < this.state.tracks.length) {
-      var depart = cpt;
+      this.setState({
+        cptD : cpt
+      })
       var requestLink = "https://api.spotify.com/v1/artists?ids=";
       do {
         if(this.state.tracks[cpt].track)
@@ -61,10 +63,10 @@ class PlaylistTracks extends React.Component {
         headers: {
           Authorization: "Bearer " + this.props.token,
         },
-        success: (data) => {
+        success: (data) => { 
           var tracksUpdated = this.state.tracks;
-          for (let i = depart; i < depart + data.artists.length; i++) {
-            tracksUpdated[i].track.genres = data.artists[i - depart].genres;
+          for (let i = this.state.cptD; i < this.state.cptD + data.artists.length; i++) {
+            tracksUpdated[i].track.genres = data.artists[i - this.state.cptD].genres;
           }
           this.setState({
             tracks: tracksUpdated,
