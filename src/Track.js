@@ -29,7 +29,7 @@ const Track = (props) => {
         </div>
       </ListGroupItem>
     );
-  if (props.genresSelected === "")
+  if (props.genresSelected.length === 0)
     return (
       <ListGroupItem className="border border-success bg-dark">
         <div className="d-flex justify-content-center">
@@ -79,7 +79,7 @@ const Track = (props) => {
     });
     return rep.includes(true);
   });
-  if (response.includes(true))
+  if (response.includes(true) || props.track.genres.length === 0)
     return (
       <ListGroupItem className="border border-success bg-dark">
         <div className="d-flex justify-content-center">
