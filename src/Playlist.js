@@ -12,7 +12,7 @@ const Playlist = ({ playlist, buttonOnClick }) => {
         return (
           <ListGroupItem className="border-success bg-dark" style={props}>
             <div className="row align-items-center justify-content-start">
-              <img className="col-3" src={playlist.images[0].url}></img>
+              <img className="col-3" src={playlist.images[0].url} alt={`img-${playlist.name}`}></img>
               <div className="row justify-content-center col-9">
                 <h3 className="col-12 mb-4">{playlist.name}</h3>
                 <Button
