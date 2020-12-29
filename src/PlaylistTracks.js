@@ -4,12 +4,25 @@ import * as $ from "jquery";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
 
 import Track from "./Track";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const electro = ["edm", "electro", "house", "dance", "room", "dubstep", "bass", "trap", "bounce", "brostep"];
-const latino = ["latino", "funk", "reggaeton", "hip hop tuga"]
+const electro = [
+  "edm",
+  "electro",
+  "house",
+  "dance",
+  "room",
+  "dubstep",
+  "bass",
+  "trap",
+  "bounce",
+  "brostep",
+];
+const latino = ["latino", "funk", "reggaeton", "hip hop tuga"];
 
 class PlaylistTracks extends React.Component {
   constructor(props) {
@@ -48,26 +61,31 @@ class PlaylistTracks extends React.Component {
     while (cpt < this.state.tracks.length) {
       // var cptD = cpt
       this.setState({
-        cptD : cpt
-      })
+        cptD: cpt,
+      });
       var requestLink = "https://api.spotify.com/v1/artists?ids=";
       do {
-        if(this.state.tracks[cpt].track)
+        if (this.state.tracks[cpt].track)
           requestLink += this.state.tracks[cpt].track.artists[0].id + ",";
         cpt++;
       } while (cpt < this.state.tracks.length && cpt % 49 !== 0);
       requestLink = requestLink.slice(0, requestLink.length - 1);
 
-       await $.ajax({
+      await $.ajax({
         url: requestLink,
         type: "GET",
         headers: {
           Authorization: "Bearer " + this.props.token,
         },
-        success: (data) => { 
+        success: (data) => {
           var tracksUpdated = this.state.tracks;
-          for (let i = this.state.cptD; i < this.state.cptD + data.artists.length; i++) {
-            tracksUpdated[i].track.genres = data.artists[i - this.state.cptD].genres;
+          for (
+            let i = this.state.cptD;
+            i < this.state.cptD + data.artists.length;
+            i++
+          ) {
+            tracksUpdated[i].track.genres =
+              data.artists[i - this.state.cptD].genres;
           }
           this.setState({
             tracks: tracksUpdated,
@@ -79,8 +97,19 @@ class PlaylistTracks extends React.Component {
 
   selectGenre = (genre) => {
     this.setState({
-      genresSelected: genre, 
+      genresSelected: genre,
     });
+  };
+
+  handleChangeInput = ({ target: { value } }) => {
+    if (value === "")
+      this.setState({
+        genresSelected: [],
+      });
+    else
+      this.setState({
+        genresSelected: [value],
+      });
   };
 
   // TODO : Loading
@@ -88,20 +117,36 @@ class PlaylistTracks extends React.Component {
     return (
       <div>
         {this.state.genresSelected.length !== 0 ? (
-          <div>
-            <Button
-              onClick={() => this.selectGenre("")}
-              className="mb-2"
-              variant="danger"
-            >
-              Deselectionner le genre
-            </Button>
-            <p> Genre choisi : {this.state.genresSelected[0]}</p>
+          <div className="row">
+            <div className="col-6">
+              <Button
+                onClick={() => 
+                  this.selectGenre("")
+                }
+                className="mb-2"
+                variant="danger"
+              >
+                Deselectionner le genre
+              </Button>
+            </div>
+            <div className="col-6">
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Genre Choisi</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  onChange={this.handleChangeInput}
+                  value={this.state.genresSelected[0]}
+                />
+              </InputGroup>
+            </div>
           </div>
         ) : (
-          <div>
-            <Dropdown className="mb-2">
-              <Dropdown.Toggle variant="success">Selectionner un genre</Dropdown.Toggle>
+          <div className="row">
+            <Dropdown className="mb-2 col-6">
+              <Dropdown.Toggle variant="success">
+                Selectionner un genre
+              </Dropdown.Toggle>
               <Dropdown.Menu>
                 {this.state.genresToSelect.map((genre, index) => {
                   return (
@@ -115,6 +160,17 @@ class PlaylistTracks extends React.Component {
                 })}
               </Dropdown.Menu>
             </Dropdown>
+            <div className="col-6">
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Genre Choisi</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  onChange={this.handleChangeInput}
+                  value={this.state.genresSelected[0]}
+                />
+              </InputGroup>
+            </div>
           </div>
         )}
         <ListGroup>
