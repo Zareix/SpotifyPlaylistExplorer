@@ -114,7 +114,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <Logo tokenIsSet={this.state.token ? true : false} />
-          <ScrollButton/>
+          <ScrollButton />
 
           {!this.state.token && (
             <Button
@@ -130,8 +130,8 @@ class App extends Component {
           {this.state.token &&
             !this.state.no_data &&
             !this.state.playlistChoosen && (
-              <div className="row mx-auto m-3 rounded">
-                <ListGroup style={{ width: "60vw" }}>
+              <div className="row mx-auto m-3 rounded playlists">
+                <ListGroup>
                   {this.state.playlists.map((playlist) => (
                     <Playlist
                       key={playlist.id}

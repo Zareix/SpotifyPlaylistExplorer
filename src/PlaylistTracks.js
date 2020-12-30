@@ -11,8 +11,8 @@ import Track from "./Track";
 import Dropdown from "react-bootstrap/Dropdown";
 
 const electro = [
-  "edm",
   "electro",
+  "edm",
   "house",
   "dance",
   "room",
@@ -113,23 +113,22 @@ class PlaylistTracks extends React.Component {
   };
 
   // TODO : Loading
+  // TODO : Responsive
   render() {
     return (
       <div>
         {this.state.genresSelected.length !== 0 ? (
           <div className="row">
-            <div className="col-6">
+            <div className="col-12 col-sm-6">
               <Button
-                onClick={() => 
-                  this.selectGenre("")
-                }
+                onClick={() => this.selectGenre("")}
                 className="mb-2"
                 variant="danger"
               >
                 Deselectionner le genre
               </Button>
             </div>
-            <div className="col-6">
+            <div className="col-12 col-sm-6">
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text>Genre Choisi</InputGroup.Text>
@@ -143,7 +142,7 @@ class PlaylistTracks extends React.Component {
           </div>
         ) : (
           <div className="row">
-            <Dropdown className="mb-2 col-6">
+            <Dropdown className="mb-2 col-12 col-sm-6">
               <Dropdown.Toggle variant="success">
                 Selectionner un genre
               </Dropdown.Toggle>
@@ -160,7 +159,7 @@ class PlaylistTracks extends React.Component {
                 })}
               </Dropdown.Menu>
             </Dropdown>
-            <div className="col-6">
+            <div className="col-12 col-sm-6">
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text>Genre Choisi</InputGroup.Text>
