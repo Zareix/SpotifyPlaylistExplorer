@@ -4,6 +4,7 @@ import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import "./Track.css";
+import BtnSelectTrack from "./BtnSelectTrack";
 
 const Track = (props) => {
   // TODO : Animation
@@ -71,6 +72,7 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
+        <BtnSelectTrack track={props.track}/>
       </ListGroupItem>
     );
   var response = props.track.genres.map((genre) => {
@@ -118,6 +120,7 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
+        <BtnSelectTrack track={props.track}/>
       </ListGroupItem>
     );
   return null;
