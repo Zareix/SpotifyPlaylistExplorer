@@ -3,7 +3,9 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-modal";
 
-const BtnSelectTrack = (props) => {
+const BtnMoreInfoTrack = (props) => {
+  Modal.setAppElement(document.getElementById('App'));
+
   const customStyles = {
     content: {
       top: "50%",
@@ -35,7 +37,7 @@ const BtnSelectTrack = (props) => {
         contentLabel="Example Modal"
       >
           {props.track.album.images[0] && (
-              <img src={props.track.album.images[0].url} width={300} className="mb-2"/>
+              <img src={props.track.album.images[0].url} width={300} className="mb-2" alt={`album-img-${props.track.album.name}`}/>
           )}
         <h1>{props.track.name}</h1>
         <h3> - {props.track.artists[0].name}</h3>
@@ -52,4 +54,4 @@ const BtnSelectTrack = (props) => {
   );
 };
 
-export default BtnSelectTrack;
+export default BtnMoreInfoTrack;
