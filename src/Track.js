@@ -72,17 +72,16 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
-        <BtnSelectTrack track={props.track}/>
+        <BtnSelectTrack track={props.track} />
       </ListGroupItem>
     );
-  var response = props.track.genres.map((genre) => {
-    var rep = props.genresSelected.map((g) => {
-      if (genre.includes(g)) return true;
-      return false
-    });
-    return rep.includes(true);
-  });
-  if (response.includes(true) || props.track.genres.length === 0)
+
+  if (
+    props.track.genres.some((genre) =>
+      props.genresSelected.some((g) => genre.includes(g))
+    ) ||
+    props.track.genres.length === 0
+  )
     return (
       <ListGroupItem className="border border-success bg-dark">
         <div className="d-flex justify-content-center">
@@ -111,7 +110,7 @@ const Track = (props) => {
               <Dropdown.Menu>
                 {props.track.genres.map((genre) => {
                   return (
-                    <Dropdown.Item onClick={() => props.selectGenre(genre)}>
+                    <Dropdown.Item onClick={() => props.selectGenre([genre])}>
                       {genre}
                     </Dropdown.Item>
                   );
@@ -120,7 +119,7 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
-        <BtnSelectTrack track={props.track}/>
+        <BtnSelectTrack track={props.track} />
       </ListGroupItem>
     );
   return null;

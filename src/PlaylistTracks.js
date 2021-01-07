@@ -29,7 +29,7 @@ class PlaylistTracks extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      genresSelected: [],
+      genresSelected: [""],
       genresToSelect: [electro, latino],
     };
     this.getAllTracks = this.getAllTracks.bind(this);
@@ -102,14 +102,9 @@ class PlaylistTracks extends React.Component {
   };
 
   handleChangeInput = ({ target: { value } }) => {
-    if (value === "")
-      this.setState({
-        genresSelected: [],
-      });
-    else
-      this.setState({
-        genresSelected: [value],
-      });
+    this.setState({
+      genresSelected: [value],
+    });
   };
 
   // TODO : Loading
@@ -117,15 +112,15 @@ class PlaylistTracks extends React.Component {
   render() {
     return (
       <div>
-        {this.state.genresSelected.length !== 0 ? (
+        {this.state.genresSelected[0] !== "" ? (
           <div className="row">
             <div className="col-12 col-sm-6">
               <Button
-                onClick={() => this.selectGenre("")}
+                onClick={() => this.selectGenre([""])}
                 className="mb-2"
                 variant="danger"
               >
-                Deselectionner le genre
+                Déselectionner le genre
               </Button>
             </div>
             <div className="col-12 col-sm-6">
@@ -134,6 +129,7 @@ class PlaylistTracks extends React.Component {
                   <InputGroup.Text>Genre Choisi</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
+                  id="inputGenre"
                   onChange={this.handleChangeInput}
                   value={this.state.genresSelected[0]}
                 />
