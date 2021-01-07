@@ -24,7 +24,6 @@ const BtnSelectTrack = (props) => {
   function closeModal() {
     setIsOpen(false);
   }
-  console.log(props.track)
 
   return (
     <div>
