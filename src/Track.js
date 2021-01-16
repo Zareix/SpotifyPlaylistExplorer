@@ -78,7 +78,7 @@ const Track = (props) => {
 
   if (
     props.track.genres.some((genre) =>
-      props.genresSelected.some((g) => genre.includes(g))
+      props.genresSelected.some((g) => genre.toUpperCase().includes(g.toUpperCase()))
     ) ||
     props.track.genres.length === 0
   )
