@@ -114,7 +114,7 @@ class PlaylistTracks extends React.Component {
       <div>
         {this.state.genresSelected[0] !== "" ? (
           <div className="row">
-            <div className="col-12 col-sm-6">
+            <div className="col-12 col-ld-6">
               <Button
                 onClick={() => this.selectGenre([""])}
                 className="mb-2"

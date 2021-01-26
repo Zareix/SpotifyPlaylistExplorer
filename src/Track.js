@@ -1,10 +1,10 @@
-import React from "react";
+import React from "react"
 
-import ListGroupItem from "react-bootstrap/ListGroupItem";
-import Dropdown from "react-bootstrap/Dropdown";
+import ListGroupItem from "react-bootstrap/ListGroupItem"
+import Dropdown from "react-bootstrap/Dropdown"
 
-import "./Track.css";
-import BtnMoreInfoTrack from "./BtnMoreInfoTrack";
+import "./Track.css"
+import BtnMoreInfoTrack from "./BtnMoreInfoTrack"
 
 const Track = (props) => {
   // TODO : Animation
@@ -23,13 +23,13 @@ const Track = (props) => {
                     <span>{artist.name}, </span>
                   )}
                 </span>
-              );
+              )
             })}
             <span class="fw-bold">- {props.track.name}</span>
           </div>
         </div>
       </ListGroupItem>
-    );
+    )
   if (props.genresSelected.length === 0)
     return (
       <ListGroupItem className="border border-success bg-dark">
@@ -45,12 +45,12 @@ const Track = (props) => {
                     <span>{artist.name}, </span>
                   )}
                 </span>
-              );
+              )
             })}
             <span class="fw-bold">- {props.track.name}</span>
           </div>
         </div>
-        <div>
+        <div className=" mb-2 mb-md-0">
           {props.track.genres && props.track.genres.length > 0 && (
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -61,12 +61,12 @@ const Track = (props) => {
                   return (
                     <Dropdown.Item
                       onClick={() => {
-                        props.selectGenre([genre]);
+                        props.selectGenre([genre])
                       }}
                     >
                       {genre}
                     </Dropdown.Item>
-                  );
+                  )
                 })}
               </Dropdown.Menu>
             </Dropdown>
@@ -74,11 +74,13 @@ const Track = (props) => {
         </div>
         <BtnMoreInfoTrack track={props.track} />
       </ListGroupItem>
-    );
+    )
 
   if (
     props.track.genres.some((genre) =>
-      props.genresSelected.some((g) => genre.toUpperCase().includes(g.toUpperCase()))
+      props.genresSelected.some((g) =>
+        genre.toUpperCase().includes(g.toUpperCase())
+      )
     ) ||
     props.track.genres.length === 0
   )
@@ -96,12 +98,12 @@ const Track = (props) => {
                     <span>{artist.name}, </span>
                   )}
                 </span>
-              );
+              )
             })}
             <span class="fw-bold">- {props.track.name}</span>
           </div>
         </div>
-        <div>
+        <div className=" m-2 m-md-0">
           {props.track.genres && props.track.genres.length > 0 && (
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -113,7 +115,7 @@ const Track = (props) => {
                     <Dropdown.Item onClick={() => props.selectGenre([genre])}>
                       {genre}
                     </Dropdown.Item>
-                  );
+                  )
                 })}
               </Dropdown.Menu>
             </Dropdown>
@@ -121,8 +123,8 @@ const Track = (props) => {
         </div>
         <BtnMoreInfoTrack track={props.track} />
       </ListGroupItem>
-    );
-  return null;
-};
+    )
+  return null
+}
 
-export default Track;
+export default Track

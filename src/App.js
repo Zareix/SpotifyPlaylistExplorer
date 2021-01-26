@@ -144,7 +144,7 @@ class App extends Component {
             )}
 
           {this.state.playlistChoosen && (
-            <div className="mb-4 col-7">
+            <div className="mb-4 col-10 col-md-7">
               <Button
                 className="m-3"
                 variant="secondary"
