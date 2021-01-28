@@ -116,7 +116,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           {this.state.online ? (
-            <div>
+            <div className="App-header">
               <Logo tokenIsSet={this.state.token ? true : false} />
               <ScrollButton />
 
