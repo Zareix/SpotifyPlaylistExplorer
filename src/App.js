@@ -11,7 +11,6 @@ import Logo from "./Logo"
 import Loading from "./Loading"
 import ScrollButton from "./ScrollButton"
 
-
 const axios = require('axios')
 
 // Get the hash of the url
@@ -30,7 +29,7 @@ const hash = window.location.hash
 
 
 const App = () => {
-  const [token, setToken] = useState(hash.access_token)
+  const [token] = useState(hash.access_token)
   const [playlists, setPlaylists] = useState([{
     id: "",
     images: [{ url: "" }],
@@ -44,7 +43,19 @@ const App = () => {
 
   useEffect(() => {
     if (token !== null) {
-      getAllPlaylist()
+      setLoading(true)
+      axios
+        .get("https://api.spotify.com/v1/me/playlists", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => {
+          if (!res.data) {
+            setNo_data(true)
+            return
+          }
+          setPlaylists(res.data.items)
+          setLoading(false)
+        })
     }
 
     window.addEventListener("offline", () => {
@@ -63,23 +74,6 @@ const App = () => {
     }
     window.location.hash = ""
   }, [token])
-
-
-  const getAllPlaylist = async () => {
-    setLoading(true)
-    axios
-      .get("https://api.spotify.com/v1/me/playlists", {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then((res) => {
-        if (!res.data) {
-          setNo_data(true)
-          return
-        }
-        setPlaylists(res.data.items)
-        setLoading(false)
-      })
-  }
 
   const choosePlaylist = (playlistC) => {
     setPlaylistChoosen(playlistC)
@@ -101,15 +95,14 @@ const App = () => {
     <div id="App">
       {token &&
         <header id="AppHeader">
-          <Logo tokenIsSet={token ? true : false} />
+          <Logo />
         </header>
       }
+      <ScrollButton />
       <main id="AppContent">
-        <ScrollButton />
-
         {!token && (
           <div id="Login" className="fullscreen">
-            <Logo tokenIsSet={token ? true : false} />
+            <Logo />
             <div>
               <Button
                 variant="success"
@@ -126,7 +119,7 @@ const App = () => {
         {token &&
           !no_data &&
           !playlistChoosen && (
-            <div className="row mx-auto m-3 rounded playlists">
+            <div className="row mx-auto m-3 playlists">
               <ListGroup>
                 {playlists.map((playlist) => (
                   <Playlist

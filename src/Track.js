@@ -16,7 +16,7 @@ const Track = (props) => {
           <div>
             {track.artists.map((artist) => {
               return (
-                <span class="text-white fs-3">
+                <span className="text-white fs-3" key={artist.id}>
                   {track.artists.length - 1 ===
                     track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
@@ -26,7 +26,7 @@ const Track = (props) => {
                 </span>
               )
             })}
-            <span class="fw-bold text-white fs-3">- {track.name}</span>
+            <span className="fw-bold text-white fs-3">- {track.name}</span>
           </div>
         </div>
       </ListGroupItem>
@@ -38,7 +38,7 @@ const Track = (props) => {
           <div>
             {track.artists.map((artist) => {
               return (
-                <span class="text-white fs-3">
+                <span className="text-white fs-3" key={artist.id}>
                   {track.artists.length - 1 ===
                     track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
@@ -48,7 +48,7 @@ const Track = (props) => {
                 </span>
               )
             })}
-            <span class="fw-bold text-white fs-3">- {track.name}</span>
+            <span className="fw-bold text-white fs-3">- {track.name}</span>
           </div>
         </div>
         <div className="m-2">
@@ -58,12 +58,13 @@ const Track = (props) => {
                 Genres
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {track.genres.map((genre) => {
+                {track.genres.map((genre, i) => {
                   return (
                     <Dropdown.Item
                       onClick={() => {
                         selectGenre([genre])
                       }}
+                      key={i}
                     >
                       {genre}
                     </Dropdown.Item>
@@ -91,7 +92,7 @@ const Track = (props) => {
           <div>
             {track.artists.map((artist) => {
               return (
-                <span class="text-white fs-3">
+                <span className="text-white fs-3" key={artist.id}>
                   {track.artists.length - 1 ===
                     track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
@@ -101,7 +102,7 @@ const Track = (props) => {
                 </span>
               )
             })}
-            <span class="fw-bold text-white fs-3">- {track.name}</span>
+            <span className="fw-bold text-white fs-3">- {track.name}</span>
           </div>
         </div>
         <div className="m-2">
@@ -111,9 +112,9 @@ const Track = (props) => {
                 Genres
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {track.genres.map((genre) => {
+                {track.genres.map((genre, i) => {
                   return (
-                    <Dropdown.Item onClick={() => selectGenre([genre])}>
+                    <Dropdown.Item onClick={() => selectGenre([genre])} key={i}>
                       {genre}
                     </Dropdown.Item>
                   )
@@ -122,7 +123,7 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
-        <BtnMoreInfoTrack track={track} />
+        <BtnMoreInfoTrack track={track}/>
       </ListGroupItem>
     )
   return null

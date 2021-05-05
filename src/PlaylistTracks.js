@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Dropdown from "react-bootstrap/Dropdown";
-import Spinner from "react-bootstrap/Spinner";
 
 import Track from "./Track";
 import Loading from "./Loading";
@@ -29,48 +28,47 @@ const latino = ["latino", "funk", "reggaeton", "hip hop tuga"];
 const PlaylistTracks = (props) => {
   const { token, playlist } = props
 
-  const [tracks, setTracks] = useState([])
+  const [tracks, setTracks] = useState()
   const [genresSelected, setGenresSelected] = useState([""])
-  const [genresToSelect, setGenresToSelect] = useState([electro, latino])
+  const [genresToSelect] = useState([electro, latino])
   const [loading, setLoading] = useState(true)
 
-  useEffect(async () => {
-    setTracks(await axios
-      .get(playlist.tracks.href, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(async (res) => {
-        let _tracks = res.data.items
-        let cpt = 0
-        let cptD = 0
+  useEffect(() => {
+    const getPlaylistTracks = async () => {
+      const res = await axios
+        .get(playlist.tracks.href, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      let _tracks = res.data.items
+      let cpt = 0
+      let cptD = 0
 
-        while (cpt < _tracks.length) {
-          cptD = cpt
-          var requestLink = "https://api.spotify.com/v1/artists?ids=";
-          do {
-            if (_tracks[cpt].track)
-              requestLink += _tracks[cpt].track.artists[0].id + ",";
-            cpt++;
-          } while (cpt < _tracks.length && cpt % 49 !== 0);
-          requestLink = requestLink.slice(0, requestLink.length - 1);
+      while (cpt < _tracks.length) {
+        cptD = cpt
+        var requestLink = "https://api.spotify.com/v1/artists?ids=";
+        do {
+          if (_tracks[cpt].track)
+            requestLink += _tracks[cpt].track.artists[0].id + ",";
+          cpt++;
+        } while (cpt < _tracks.length && cpt % 49 !== 0);
+        requestLink = requestLink.slice(0, requestLink.length - 1);
 
-          await axios.get(
-            requestLink, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-            .then((res) => {
-              let tracksUpdated = _tracks;
-              for (let i = cptD; i < cptD + res.data.artists.length; i++) {
-                tracksUpdated[i].track.genres =
-                  res.data.artists[i - cptD].genres;
-              }
-              _tracks = tracksUpdated
-            });
+        const result = await axios.get(
+          requestLink, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        let tracksUpdated = _tracks;
+        for (let i = cptD; i < cptD + result.data.artists.length; i++) {
+          tracksUpdated[i].track.genres =
+            result.data.artists[i - cptD].genres;
         }
-        return _tracks
-      }));
+        _tracks = tracksUpdated
+      }
+      setTracks(_tracks)
+    }
+    getPlaylistTracks()
     setLoading(false)
-  }, [])
+  }, [token, playlist])
 
   const selectGenre = (genre) => {
     setGenresSelected(genre)
@@ -83,6 +81,7 @@ const PlaylistTracks = (props) => {
   if (loading)
     return <Loading />
 
+  console.log(tracks);
   return (
     <div>
       {genresSelected[0] !== "" ? (
@@ -142,7 +141,7 @@ const PlaylistTracks = (props) => {
         </div>
       )}
       <ListGroup>
-        {tracks.map((track) => {
+        {tracks && tracks.map((track) => {
           if (track.track) {
             return (
               <Track

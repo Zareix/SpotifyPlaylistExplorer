@@ -28,7 +28,7 @@ const BtnMoreInfoTrack = (props) => {
   }
 
   return (
-    <div>
+    <div key={props.track.id}>
       <Button onClick={openModal}>Plus d'info</Button>
       <Modal
         isOpen={modalIsOpen}
@@ -47,11 +47,11 @@ const BtnMoreInfoTrack = (props) => {
           )}
           <h1>{props.track.name}</h1>
           <h3>
-            {props.track.artists.map((artist) => {
+            {props.track.artists.map((artist, i) => {
               return (
-                <span>
+                <span key={i}>
                   {props.track.artists.length - 1 ===
-                  props.track.artists.indexOf(artist) ? (
+                    props.track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
                   ) : (
                     <span>{artist.name}, </span>
