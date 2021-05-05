@@ -140,7 +140,7 @@ const PlaylistTracks = (props) => {
           </div>
         </div>
       )}
-      <ListGroup>
+      <ListGroup className="shadow">
         {tracks && tracks.map((track) => {
           if (track.track) {
             return (

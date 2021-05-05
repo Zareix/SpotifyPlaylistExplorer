@@ -3,7 +3,7 @@ import { Button, ListGroupItem } from "react-bootstrap";
 
 const Playlist = ({ playlist, buttonOnClick }) => {
   return (
-    <ListGroupItem className="border-success bg-dark" key={playlist.id}>
+    <ListGroupItem className="shadow bg-dark" key={playlist.id}>
       <div className="row align-items-center justify-content-center">
         <img
           className="col-sm-3 col-6 mb-2 mb-sm-0"
