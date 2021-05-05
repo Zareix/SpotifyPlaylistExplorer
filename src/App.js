@@ -42,7 +42,7 @@ const App = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (token !== null) {
+    if (token !== null && token !== undefined) {
       setLoading(true)
       axios
         .get("https://api.spotify.com/v1/me/playlists", {
@@ -101,7 +101,7 @@ const App = () => {
       <ScrollButton />
       <main id="AppContent">
         {!token && (
-          <div id="Login" className="fullscreen">
+          <div id="Login">
             <Logo />
             <div>
               <Button
