@@ -1,14 +1,16 @@
-import React from "react";
-
-import * as $ from "jquery";
+import React, { useState, useEffect } from "react";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import Dropdown from "react-bootstrap/Dropdown";
+import Spinner from "react-bootstrap/Spinner";
 
 import Track from "./Track";
-import Dropdown from "react-bootstrap/Dropdown";
+import Loading from "./Loading";
+
+const axios = require('axios')
 
 const electro = [
   "electro",
@@ -24,168 +26,139 @@ const electro = [
 ];
 const latino = ["latino", "funk", "reggaeton", "hip hop tuga"];
 
-class PlaylistTracks extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tracks: [],
-      genresSelected: [""],
-      genresToSelect: [electro, latino],
-    };
-    this.getAllTracks = this.getAllTracks.bind(this);
-  }
+const PlaylistTracks = (props) => {
+  const { token, playlist } = props
 
-  componentDidMount() {
-    this.getAllTracks().then(() => {
-      this.getAllGenres();
-    });
-  }
+  const [tracks, setTracks] = useState([])
+  const [genresSelected, setGenresSelected] = useState([""])
+  const [genresToSelect, setGenresToSelect] = useState([electro, latino])
+  const [loading, setLoading] = useState(true)
 
-  async getAllTracks() {
-    await $.ajax({
-      url: this.props.playlist.tracks.href,
-      type: "GET",
-      headers: {
-        Authorization: "Bearer " + this.props.token,
-      },
-      success: (data) => {
-        this.setState({
-          tracks: data.items,
-        });
-      },
-    });
-  }
+  useEffect(async () => {
+    setTracks(await axios
+      .get(playlist.tracks.href, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(async (res) => {
+        let _tracks = res.data.items
+        let cpt = 0
+        let cptD = 0
 
-  async getAllGenres() {
-    var cpt = 0;
-    while (cpt < this.state.tracks.length) {
-      // var cptD = cpt
-      this.setState({
-        cptD: cpt,
-      });
-      var requestLink = "https://api.spotify.com/v1/artists?ids=";
-      do {
-        if (this.state.tracks[cpt].track)
-          requestLink += this.state.tracks[cpt].track.artists[0].id + ",";
-        cpt++;
-      } while (cpt < this.state.tracks.length && cpt % 49 !== 0);
-      requestLink = requestLink.slice(0, requestLink.length - 1);
+        while (cpt < _tracks.length) {
+          cptD = cpt
+          var requestLink = "https://api.spotify.com/v1/artists?ids=";
+          do {
+            if (_tracks[cpt].track)
+              requestLink += _tracks[cpt].track.artists[0].id + ",";
+            cpt++;
+          } while (cpt < _tracks.length && cpt % 49 !== 0);
+          requestLink = requestLink.slice(0, requestLink.length - 1);
 
-      await $.ajax({
-        url: requestLink,
-        type: "GET",
-        headers: {
-          Authorization: "Bearer " + this.props.token,
-        },
-        success: (data) => {
-          var tracksUpdated = this.state.tracks;
-          for (
-            let i = this.state.cptD;
-            i < this.state.cptD + data.artists.length;
-            i++
-          ) {
-            tracksUpdated[i].track.genres =
-              data.artists[i - this.state.cptD].genres;
-          }
-          this.setState({
-            tracks: tracksUpdated,
-          });
-        },
-      });
-    }
-  }
+          await axios.get(
+            requestLink, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+            .then((res) => {
+              let tracksUpdated = _tracks;
+              for (let i = cptD; i < cptD + res.data.artists.length; i++) {
+                tracksUpdated[i].track.genres =
+                  res.data.artists[i - cptD].genres;
+              }
+              _tracks = tracksUpdated
+            });
+        }
+        return _tracks
+      }));
+    setLoading(false)
+  }, [])
 
-  selectGenre = (genre) => {
-    this.setState({
-      genresSelected: genre,
-    });
+  const selectGenre = (genre) => {
+    setGenresSelected(genre)
   };
 
-  handleChangeInput = ({ target: { value } }) => {
-    this.setState({
-      genresSelected: [value],
-    });
+  const handleChangeInput = ({ target: { value } }) => {
+    setGenresSelected([value])
   };
 
-  // TODO : Loading
-  // TODO : Responsive
-  render() {
-    return (
-      <div>
-        {this.state.genresSelected[0] !== "" ? (
-          <div className="row">
-            <div className="col-12 col-ld-6">
-              <Button
-                onClick={() => this.selectGenre([""])}
-                className="mb-2"
-                variant="danger"
-              >
-                Déselectionner le genre
+  if (loading)
+    return <Loading />
+
+  return (
+    <div>
+      {genresSelected[0] !== "" ? (
+        <div className="row">
+          <div className="col-12 col-ld-6">
+            <Button
+              onClick={() => selectGenre([""])}
+              className="mb-2"
+              variant="danger"
+            >
+              Déselectionner le genre
               </Button>
-            </div>
-            <div className="col-12 col-sm-6">
-              <InputGroup className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Genre Choisi</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  id="inputGenre"
-                  onChange={this.handleChangeInput}
-                  value={this.state.genresSelected[0]}
-                />
-              </InputGroup>
-            </div>
           </div>
-        ) : (
-          <div className="row">
-            <Dropdown className="mb-2 col-12 col-sm-6">
-              <Dropdown.Toggle variant="success">
-                Selectionner un genre
+          <div className="col-12 col-sm-6">
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text>Genre Choisi</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                id="inputGenre"
+                onChange={handleChangeInput}
+                value={genresSelected[0]}
+              />
+            </InputGroup>
+          </div>
+        </div>
+      ) : (
+        <div className="row">
+          <Dropdown className="mb-2 col-12 col-sm-6">
+            <Dropdown.Toggle variant="success">
+              Selectionner un genre
               </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {this.state.genresToSelect.map((genre, index) => {
-                  return (
-                    <Dropdown.Item
-                      onClick={() => this.selectGenre(genre)}
-                      key={index}
-                    >
-                      {genre[0]}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-            <div className="col-12 col-sm-6">
-              <InputGroup className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Genre Choisi</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  onChange={this.handleChangeInput}
-                  value={this.state.genresSelected[0]}
-                />
-              </InputGroup>
-            </div>
+            <Dropdown.Menu>
+              {genresToSelect.map((genre, index) => {
+                return (
+                  <Dropdown.Item
+                    onClick={() => selectGenre(genre)}
+                    key={index}
+                  >
+                    {genre[0]}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
+          <div className="col-12 col-sm-6">
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text>Genre Choisi</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                onChange={handleChangeInput}
+                value={genresSelected[0]}
+              />
+            </InputGroup>
           </div>
-        )}
-        <ListGroup>
-          {this.state.tracks.map((track) => {
-            if (track.track) {
-              return (
-                <Track
-                  key={track.track.id}
-                  track={track.track}
-                  genresSelected={this.state.genresSelected}
-                  selectGenre={this.selectGenre}
-                ></Track>
-              );
-            }
-            return null;
-          })}
-        </ListGroup>
-      </div>
-    );
-  }
+        </div>
+      )}
+      <ListGroup>
+        {tracks.map((track) => {
+          if (track.track) {
+            return (
+              <Track
+                key={track.track.id}
+                track={track.track}
+                genresSelected={genresSelected}
+                selectGenre={selectGenre}
+              ></Track>
+            );
+          }
+          return null;
+        })}
+      </ListGroup>
+    </div>
+  );
+
 }
 
 export default PlaylistTracks;

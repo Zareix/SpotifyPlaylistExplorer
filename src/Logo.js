@@ -9,6 +9,7 @@ const Logo = (props) => {
   return (
     <animated.img
       src={logo}
+      id="AppLogo"
       className="mt-4 mb-2"
       style={props.tokenIsSet ? spring2 : spring1}
       alt="logo"

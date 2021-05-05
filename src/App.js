@@ -1,18 +1,22 @@
-import React, { Component } from "react"
-import * as $ from "jquery"
+import React, { useEffect, useState } from "react"
 
 import Button from "react-bootstrap/Button"
+import ListGroup from "react-bootstrap/ListGroup"
 
 import { clientId, redirectUri, scopes, authEndpoint } from "./config"
 import "./App.css"
 import Playlist from "./Playlist"
 import PlaylistTracks from "./PlaylistTracks"
 import Logo from "./Logo"
-
-import ListGroup from "react-bootstrap/ListGroup"
+import Loading from "./Loading"
 import ScrollButton from "./ScrollButton"
 
+
+const axios = require('axios')
+
 // Get the hash of the url
+
+
 const hash = window.location.hash
   .substring(1)
   .split("&")
@@ -24,154 +28,137 @@ const hash = window.location.hash
     return initial
   }, {})
 
-window.location.hash = ""
 
-class App extends Component {
-  constructor() {
-    super()
-    this.state = {
-      token: null,
-      playlists: [
-        {
-          id: "",
-          images: [{ url: "" }],
-          name: "",
-          tracks: [],
-        },
-      ],
-      no_data: false,
-      playlistChoosen: null,
-      online: navigator.onLine,
-    }
+const App = () => {
+  const [token, setToken] = useState(hash.access_token)
+  const [playlists, setPlaylists] = useState([{
+    id: "",
+    images: [{ url: "" }],
+    name: "",
+    tracks: [],
+  }])
+  const [no_data, setNo_data] = useState(false)
+  const [playlistChoosen, setPlaylistChoosen] = useState(null)
+  const [online, setOnline] = useState(navigator.onLine)
+  const [loading, setLoading] = useState(true)
 
-    this.getAllPlaylist = this.getAllPlaylist.bind(this)
-    this.choosePlaylist = this.choosePlaylist.bind(this)
-  }
-
-  componentDidMount() {
-    // Set token
-    let _token = hash.access_token
-
-    if (_token) {
-      // Set token
-      this.setState({
-        token: _token,
-      })
-      this.getAllPlaylist(_token)
+  useEffect(() => {
+    if (token !== null) {
+      getAllPlaylist()
     }
 
     window.addEventListener("offline", () => {
-      this.setState({ online: false })
+      setOnline(false)
       console.log("offline")
     })
 
     window.addEventListener("online", () => {
-      this.setState({ online: true })
+      setOnline(true)
       console.log("online")
     })
-  }
 
-  tick() {
-    this.setState(this.state, () => {
-      this.state.playlists.pop()
-    })
-  }
 
-  getAllPlaylist(token) {
-    $.ajax({
-      url: "https://api.spotify.com/v1/me/playlists",
-      type: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-      /*
-        beforeSend: (xhr) => {
-          xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
-        },
-      */
-      success: (data) => {
-        if (!data) {
-          this.setState({
-            no_data: true,
-          })
+    if (token === null || token === undefined) {
+      setLoading(false)
+    }
+    window.location.hash = ""
+  }, [token])
+
+
+  const getAllPlaylist = async () => {
+    setLoading(true)
+    axios
+      .get("https://api.spotify.com/v1/me/playlists", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((res) => {
+        if (!res.data) {
+          setNo_data(true)
           return
         }
-        this.setState({
-          playlists: data.items,
-        })
-      },
-    })
+        setPlaylists(res.data.items)
+        setLoading(false)
+      })
   }
 
-  choosePlaylist = (playlistC) => {
-    this.setState({ playlistChoosen: playlistC })
+  const choosePlaylist = (playlistC) => {
+    setPlaylistChoosen(playlistC)
   }
 
-  handleClickRetour = () => {
-    this.setState({ playlistChoosen: null })
+  const handleClickRetour = () => {
+    setPlaylistChoosen(null)
   }
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          {this.state.online ? (
-            <div className="App-header">
-              <Logo tokenIsSet={this.state.token ? true : false} />
-              <ScrollButton />
+  if (loading)
+    return <div id="App">
+      <Loading fullscreen />
+    </div>
 
-              {!this.state.token && (
-                <Button
-                  variant="success"
-                  href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
-                    "%20"
-                  )}&response_type=token&show_dialog=true`}
-                >
-                  Login to Spotify
-                </Button>
-              )}
+  if (!online)
+    return <main id="App">You must be connected to internet for this app to work !</main>
 
-              {this.state.token &&
-                !this.state.no_data &&
-                !this.state.playlistChoosen && (
-                  <div className="row mx-auto m-3 rounded playlists">
-                    <ListGroup>
-                      {this.state.playlists.map((playlist) => (
-                        <Playlist
-                          key={playlist.id}
-                          playlist={playlist}
-                          buttonOnClick={this.choosePlaylist}
-                        ></Playlist>
-                      ))}
-                    </ListGroup>
-                  </div>
-                )}
-
-              {this.state.playlistChoosen && (
-                <div className="mb-4 col-10 col-md-7">
-                  <Button
-                    className="m-3"
-                    variant="secondary"
-                    onClick={this.handleClickRetour}
-                  >
-                    Retour
-                  </Button>
-                  <PlaylistTracks
-                    playlist={this.state.playlistChoosen}
-                    token={this.state.token}
-                  ></PlaylistTracks>
-                </div>
-              )}
-
-              {this.state.no_data && <p>Vous n'avez aucune playlist</p>}
-            </div>
-          ) : (
-            <div>You must be connected to internet for this app to work !</div>
-          )}
+  return (
+    <div id="App">
+      {token &&
+        <header id="AppHeader">
+          <Logo tokenIsSet={token ? true : false} />
         </header>
-      </div>
-    )
-  }
+      }
+      <main id="AppContent">
+        <ScrollButton />
+
+        {!token && (
+          <div id="Login" className="fullscreen">
+            <Logo tokenIsSet={token ? true : false} />
+            <div>
+              <Button
+                variant="success"
+                href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+                  "%20"
+                )}&response_type=token&show_dialog=true`}
+              >
+                Login to Spotify
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {token &&
+          !no_data &&
+          !playlistChoosen && (
+            <div className="row mx-auto m-3 rounded playlists">
+              <ListGroup>
+                {playlists.map((playlist) => (
+                  <Playlist
+                    key={playlist.id}
+                    playlist={playlist}
+                    buttonOnClick={choosePlaylist}
+                  ></Playlist>
+                ))}
+              </ListGroup>
+            </div>
+          )}
+
+        {playlistChoosen && (
+          <div className="mb-4 col-10 col-md-7 mx-auto">
+            <Button
+              className="m-3"
+              variant="secondary"
+              onClick={handleClickRetour}
+            >
+              Retour
+                  </Button>
+            <PlaylistTracks
+              playlist={playlistChoosen}
+              token={token}
+            ></PlaylistTracks>
+          </div>
+        )}
+
+        {no_data && <p>Vous n'avez aucune playlist</p>}
+      </main>
+    </div>
+  )
 }
 
 export default App

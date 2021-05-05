@@ -7,17 +7,18 @@ import "./Track.css"
 import BtnMoreInfoTrack from "./BtnMoreInfoTrack"
 
 const Track = (props) => {
+  const { track, genresSelected, selectGenre } = props
   // TODO : Animation
-  if (!props.track.genres)
+  if (!track.genres)
     return (
       <ListGroupItem className="border border-success bg-dark">
         <div className="d-flex justify-content-center">
           <div>
-            {props.track.artists.map((artist) => {
+            {track.artists.map((artist) => {
               return (
-                <span>
-                  {props.track.artists.length - 1 ===
-                  props.track.artists.indexOf(artist) ? (
+                <span class="text-white fs-3">
+                  {track.artists.length - 1 ===
+                    track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
                   ) : (
                     <span>{artist.name}, </span>
@@ -25,21 +26,21 @@ const Track = (props) => {
                 </span>
               )
             })}
-            <span class="fw-bold">- {props.track.name}</span>
+            <span class="fw-bold text-white fs-3">- {track.name}</span>
           </div>
         </div>
       </ListGroupItem>
     )
-  if (props.genresSelected.length === 0)
+  if (genresSelected.length === 0)
     return (
       <ListGroupItem className="border border-success bg-dark">
         <div className="d-flex justify-content-center">
           <div>
-            {props.track.artists.map((artist) => {
+            {track.artists.map((artist) => {
               return (
-                <span>
-                  {props.track.artists.length - 1 ===
-                  props.track.artists.indexOf(artist) ? (
+                <span class="text-white fs-3">
+                  {track.artists.length - 1 ===
+                    track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
                   ) : (
                     <span>{artist.name}, </span>
@@ -47,21 +48,21 @@ const Track = (props) => {
                 </span>
               )
             })}
-            <span class="fw-bold">- {props.track.name}</span>
+            <span class="fw-bold text-white fs-3">- {track.name}</span>
           </div>
         </div>
-        <div className=" mb-2 mb-md-0">
-          {props.track.genres && props.track.genres.length > 0 && (
+        <div className="m-2">
+          {track.genres && track.genres.length > 0 && (
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 Genres
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {props.track.genres.map((genre) => {
+                {track.genres.map((genre) => {
                   return (
                     <Dropdown.Item
                       onClick={() => {
-                        props.selectGenre([genre])
+                        selectGenre([genre])
                       }}
                     >
                       {genre}
@@ -72,27 +73,27 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
-        <BtnMoreInfoTrack track={props.track} />
+        <BtnMoreInfoTrack track={track} />
       </ListGroupItem>
     )
 
   if (
-    props.track.genres.some((genre) =>
-      props.genresSelected.some((g) =>
+    track.genres.some((genre) =>
+      genresSelected.some((g) =>
         genre.toUpperCase().includes(g.toUpperCase())
       )
     ) ||
-    props.track.genres.length === 0
+    track.genres.length === 0
   )
     return (
       <ListGroupItem className="border border-success bg-dark">
         <div className="d-flex justify-content-center">
           <div>
-            {props.track.artists.map((artist) => {
+            {track.artists.map((artist) => {
               return (
-                <span>
-                  {props.track.artists.length - 1 ===
-                  props.track.artists.indexOf(artist) ? (
+                <span class="text-white fs-3">
+                  {track.artists.length - 1 ===
+                    track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
                   ) : (
                     <span>{artist.name}, </span>
@@ -100,19 +101,19 @@ const Track = (props) => {
                 </span>
               )
             })}
-            <span class="fw-bold">- {props.track.name}</span>
+            <span class="fw-bold text-white fs-3">- {track.name}</span>
           </div>
         </div>
-        <div className=" m-2 m-md-0">
-          {props.track.genres && props.track.genres.length > 0 && (
+        <div className="m-2">
+          {track.genres && track.genres.length > 0 && (
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 Genres
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {props.track.genres.map((genre) => {
+                {track.genres.map((genre) => {
                   return (
-                    <Dropdown.Item onClick={() => props.selectGenre([genre])}>
+                    <Dropdown.Item onClick={() => selectGenre([genre])}>
                       {genre}
                     </Dropdown.Item>
                   )
@@ -121,7 +122,7 @@ const Track = (props) => {
             </Dropdown>
           )}
         </div>
-        <BtnMoreInfoTrack track={props.track} />
+        <BtnMoreInfoTrack track={track} />
       </ListGroupItem>
     )
   return null
