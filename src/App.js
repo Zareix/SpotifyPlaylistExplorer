@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 
 import Button from "react-bootstrap/Button"
 import ListGroup from "react-bootstrap/ListGroup"
@@ -10,12 +10,11 @@ import PlaylistTracks from "./PlaylistTracks"
 import Logo from "./Logo"
 import Loading from "./Loading"
 import ScrollButton from "./ScrollButton"
+import {TokenContext} from "./Context"
 
-const axios = require('axios')
+const axios = require("axios")
 
 // Get the hash of the url
-
-
 const hash = window.location.hash
   .substring(1)
   .split("&")
@@ -27,26 +26,28 @@ const hash = window.location.hash
     return initial
   }, {})
 
-
 const App = () => {
-  const [token] = useState(hash.access_token)
-  const [playlists, setPlaylists] = useState([{
-    id: "",
-    images: [{ url: "" }],
-    name: "",
-    tracks: [],
-  }])
+  const { token, setNewToken } = useContext(TokenContext)
+  const [playlists, setPlaylists] = useState([
+    {
+      id: "",
+      images: [{ url: "" }],
+      name: "",
+      tracks: [],
+    },
+  ])
   const [no_data, setNo_data] = useState(false)
   const [playlistChoosen, setPlaylistChoosen] = useState(null)
   const [online, setOnline] = useState(navigator.onLine)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setNewToken(hash.access_token)
     if (token !== null && token !== undefined) {
       setLoading(true)
       axios
         .get("https://api.spotify.com/v1/me/playlists", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           if (!res.data) {
@@ -68,7 +69,6 @@ const App = () => {
       console.log("online")
     })
 
-
     if (token === null || token === undefined) {
       setLoading(false)
     }
@@ -84,20 +84,26 @@ const App = () => {
   }
 
   if (loading)
-    return <div id="App">
-      <Loading fullscreen />
-    </div>
+    return (
+      <div id="App">
+        <Loading fullscreen />
+      </div>
+    )
 
   if (!online)
-    return <main id="App">You must be connected to internet for this app to work !</main>
+    return (
+      <main id="App">
+        You must be connected to internet for this app to work !
+      </main>
+    )
 
   return (
     <div id="App">
-      {token &&
+      {token && (
         <header id="AppHeader">
           <Logo />
         </header>
-      }
+      )}
       <ScrollButton />
       <main id="AppContent">
         {!token && (
@@ -116,21 +122,19 @@ const App = () => {
           </div>
         )}
 
-        {token &&
-          !no_data &&
-          !playlistChoosen && (
-            <div className="row mx-auto m-3 playlists">
-              <ListGroup>
-                {playlists.map((playlist) => (
-                  <Playlist
-                    key={playlist.id}
-                    playlist={playlist}
-                    buttonOnClick={choosePlaylist}
-                  ></Playlist>
-                ))}
-              </ListGroup>
-            </div>
-          )}
+        {token && !no_data && !playlistChoosen && (
+          <div className="row mx-auto m-3 playlists">
+            <ListGroup className="px-0">
+              {playlists.map((playlist) => (
+                <Playlist
+                  key={playlist.id}
+                  playlist={playlist}
+                  buttonOnClick={choosePlaylist}
+                ></Playlist>
+              ))}
+            </ListGroup>
+          </div>
+        )}
 
         {playlistChoosen && (
           <div className="mb-4 col-10 col-md-7 mx-auto">
@@ -140,7 +144,7 @@ const App = () => {
               onClick={handleClickRetour}
             >
               Retour
-                  </Button>
+            </Button>
             <PlaylistTracks
               playlist={playlistChoosen}
               token={token}
