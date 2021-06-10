@@ -91,8 +91,8 @@ const PlaylistTracks = (props) => {
               Déselectionner le genre
             </Button>
           </div>
-          <div className="col-10 col-sm-6 mx-auto">
-            <InputGroup className="mb-3 ">
+          <div className="col-12 col-sm-6 mx-auto">
+            <InputGroup className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text>Genre Choisi</InputGroup.Text>
               </InputGroup.Prepend>
