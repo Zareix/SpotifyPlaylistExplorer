@@ -10,7 +10,6 @@
 
 .scrollButtonH {
   opacity: 0.5;
-  z-index: 1000;
 }
 
 .scrollButtonH:hover {
