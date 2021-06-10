@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
 import App from "./App"
+import Context from "./Context"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 
@@ -9,7 +10,9 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Context>
+      <App />
+    </Context>
   </React.StrictMode>,
   document.getElementById("root")
 )
