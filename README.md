@@ -1,6 +1,5 @@
 # Spotify Playlist Explorer
-### Author : Raphaël Gonçalves Catarino
 
-This project aims at creating a Spotify playlist explorer in order to discover JavaScript through [React.js](https://fr.reactjs.org/) and request to API (with jQuery and AJAX).<br><br>
-To do so I used the [Spotify WEB API](https://developer.spotify.com/documentation/web-api/) and the npm package [create-react-app](https://create-react-app.dev/) to create the base of the project.<br>
-Project deployed on Heroku (via GitHub deployement) avalaible [here](https://rgc-spotify-playlist-explorer.herokuapp.com/) for testing
+This project aims at creating a Spotify playlist explorer in order to discover [React.js](https://fr.reactjs.org/) and basic HTTP requests to API (with Axios).<br><br>
+To do so I used the [Spotify WEB API](https://developer.spotify.com/documentation/web-api/).<br>
+App avalaible [here](https://spotify-explorer.raphael-catarino.fr) if you want to try it out !
