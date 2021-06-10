@@ -1,42 +1,32 @@
-import React from "react";
+import React from "react"
 
-import Button from "react-bootstrap/Button";
-import Modal from "react-modal";
+import Button from "react-bootstrap/Button"
+import Modal from "react-bootstrap/Modal"
+//import Modal from "react-modal";
 
 const BtnMoreInfoTrack = (props) => {
-  Modal.setAppElement(document.getElementById("App"));
-
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-    },
-  };
-
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalIsOpen, setIsOpen] = React.useState(false)
 
   const openModal = () => {
-    setIsOpen(true);
-  };
+    setIsOpen(true)
+  }
 
   function closeModal() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
 
   return (
     <div key={props.track.id}>
       <Button onClick={openModal}>Plus d'info</Button>
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
+        show={modalIsOpen}
+        onHide={closeModal}
+        centered
+        className="blur"
+        backdropClassName="dimmed"
+        contentClassName="bg-dark text-white"
       >
-        <div className="text-center">
+        <Modal.Body className="text-center">
           {props.track.album.images[0] && (
             <img
               src={props.track.album.images[0].url}
@@ -51,37 +41,51 @@ const BtnMoreInfoTrack = (props) => {
               return (
                 <span key={i}>
                   {props.track.artists.length - 1 ===
-                    props.track.artists.indexOf(artist) ? (
+                  props.track.artists.indexOf(artist) ? (
                     <span>{artist.name} </span>
                   ) : (
                     <span>{artist.name}, </span>
                   )}
                 </span>
-              );
+              )
             })}
           </h3>
-          <div className="mt-3 mb-3">
+          <div className="mt-3 mb-3 ms-5 text-start">
             <h5 className="mb-0">
               Album :<br></br>
             </h5>
-            <span className="ms-3">
+            <span className="ms-2">
               Type : {props.track.album.album_type}
               <br></br>
             </span>
-            <span className="ms-3">
+            <span className="ms-2">
               Nom : {props.track.album.name}
               <br></br>
             </span>
-            <span className="ms-3">
+            <span className="ms-2">
               Date de sortie : {props.track.album.release_date}
               <br></br>
             </span>
           </div>
-          <a href={props.track.external_urls.spotify}>Lien sur Spotify</a>
-        </div>
+        </Modal.Body>
+        <Modal.Footer className="border-full-dark ms-5">
+          <Button
+            variant="success"
+            target="_blank"
+            href={props.track.external_urls.spotify}
+          >
+            Voir sur Spotify
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={closeModal}
+          >
+            Fermer
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default BtnMoreInfoTrack;
+export default BtnMoreInfoTrack
