@@ -3,6 +3,9 @@
   min-height: 100vh;
   color: white;
   text-align: center;
+}
+
+#AppContent {
   padding-bottom: 5rem;
 }
 
@@ -31,7 +34,7 @@
 }
 
 .playlists {
-  width: 80%;
+  width: 90%;
 }
 
 .list-group {
@@ -57,4 +60,16 @@
 .fullscreen {
   width: 100vw;
   height: 100vh;
+}
+
+.border-full-dark {
+  border-color: #121418 !important;
+}
+
+.blur{
+  backdrop-filter: blur(4px);
+}
+
+.dimmed{
+  backdrop-filter: brightness(30%);
 }

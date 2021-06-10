@@ -9,7 +9,7 @@ const Track = (props) => {
   const { track, genresSelected, selectGenre } = props
   if (!track.genres)
     return (
-      <ListGroupItem className="bg-dark track">
+      <ListGroupItem className="bg-dark track border-full-dark">
         <div className="d-flex justify-content-center">
           <div>
             {track.artists.map((artist) => {
@@ -31,7 +31,7 @@ const Track = (props) => {
     )
   if (genresSelected.length === 0)
     return (
-      <ListGroupItem className="bg-dark track">
+      <ListGroupItem className="bg-dark track border-full-dark">
         <div className="d-flex justify-content-center">
           <div>
             {track.artists.map((artist) => {
@@ -83,7 +83,7 @@ const Track = (props) => {
     track.genres.length === 0
   )
     return (
-      <ListGroupItem className="bg-dark track">
+      <ListGroupItem className="bg-dark track border-full-dark">
         <div className="d-flex justify-content-center">
           <div>
             {track.artists.map((artist) => {
