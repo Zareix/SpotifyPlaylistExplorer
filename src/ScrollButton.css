@@ -6,6 +6,7 @@
   left: 90%;
   justify-content: center;
   cursor: pointer;
+  z-index: 100;
 }
 
 .scrollButtonH {
