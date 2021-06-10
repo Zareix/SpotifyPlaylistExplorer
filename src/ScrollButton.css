@@ -3,13 +3,13 @@
   position: fixed;
   bottom: 40px;
   align-items: center;
-  left : 90%;
+  left: 90%;
   justify-content: center;
   cursor: pointer;
 }
 
-.scrollButtonH{
-    opacity : 0.5;
+.scrollButtonH {
+  opacity: 0.5;
 }
 
 .scrollButtonH:hover {

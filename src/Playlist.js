@@ -1,9 +1,12 @@
-import React from "react";
-import { Button, ListGroupItem } from "react-bootstrap";
+import React from "react"
+import { Button, ListGroupItem } from "react-bootstrap"
 
 const Playlist = ({ playlist, buttonOnClick }) => {
   return (
-    <ListGroupItem className="shadow bg-dark border-full-dark" key={playlist.id}>
+    <ListGroupItem
+      className="shadow bg-dark border-full-dark"
+      key={playlist.id}
+    >
       <div className="row align-items-center justify-content-center">
         <img
           className="col-sm-3 col-6 mb-2 mb-sm-0"
@@ -17,11 +20,11 @@ const Playlist = ({ playlist, buttonOnClick }) => {
             onClick={() => buttonOnClick(playlist)}
           >
             Choisir
-                </Button>
+          </Button>
         </div>
       </div>
     </ListGroupItem>
-  );
-};
+  )
+}
 
-export default Playlist;
+export default Playlist

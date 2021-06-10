@@ -10,7 +10,7 @@ import PlaylistTracks from "./PlaylistTracks"
 import Logo from "./Logo"
 import Loading from "./Loading"
 import ScrollButton from "./ScrollButton"
-import {TokenContext} from "./Context"
+import { TokenContext } from "./Context"
 
 const axios = require("axios")
 

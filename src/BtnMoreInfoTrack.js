@@ -76,10 +76,7 @@ const BtnMoreInfoTrack = (props) => {
           >
             Voir sur Spotify
           </Button>
-          <Button
-            variant="secondary"
-            onClick={closeModal}
-          >
+          <Button variant="secondary" onClick={closeModal}>
             Fermer
           </Button>
         </Modal.Footer>

@@ -66,10 +66,10 @@
   border-color: #121418 !important;
 }
 
-.blur{
+.blur {
   backdrop-filter: blur(4px);
 }
 
-.dimmed{
+.dimmed {
   backdrop-filter: brightness(30%);
 }
