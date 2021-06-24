@@ -43,7 +43,18 @@ const App = () => {
 
   useEffect(() => {
     setNewToken(hash.access_token)
-    if (token !== null && token !== undefined) {
+    
+    window.addEventListener("offline", () => {
+      setOnline(false)
+      console.log("offline")
+    })
+
+    window.addEventListener("online", () => {
+      setOnline(true)
+      console.log("online")
+    })
+
+    if (online && token !== null && token !== undefined) {
       setLoading(true)
       axios
         .get("https://api.spotify.com/v1/me/playlists", {
@@ -55,16 +66,6 @@ const App = () => {
           setLoading(false)
         })
     }
-
-    window.addEventListener("offline", () => {
-      setOnline(false)
-      console.log("offline")
-    })
-
-    window.addEventListener("online", () => {
-      setOnline(true)
-      console.log("online")
-    })
 
     if (token === null || token === undefined) {
       setLoading(false)
