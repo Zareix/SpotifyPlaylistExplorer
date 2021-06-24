@@ -50,11 +50,8 @@ const App = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          if (!res.data) {
-            setNo_data(true)
-            return
-          }
-          setPlaylists(res.data.items)
+          if (!res.data) setNo_data(true)
+          else setPlaylists(res.data.items)
           setLoading(false)
         })
     }
