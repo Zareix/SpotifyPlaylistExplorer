@@ -66,10 +66,23 @@
   border-color: #121418 !important;
 }
 
+.modal-header {
+  border-bottom: none !important;
+}
+
+.modal-border {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
 .blur {
   backdrop-filter: blur(4px);
 }
 
 .dimmed {
   backdrop-filter: brightness(30%);
+}
+
+.gap {
+  gap: 0.5rem;
 }

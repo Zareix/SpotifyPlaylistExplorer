@@ -21,7 +21,6 @@ const Context = (props) => {
     if (t !== undefined) {
       localStorage.setItem("RC-SpotifyToken", t)
       localStorage.setItem("RC-SpotifyTokenExpires", Date.now())
-      console.log(Date.now())
     }
     setToken(t)
   }

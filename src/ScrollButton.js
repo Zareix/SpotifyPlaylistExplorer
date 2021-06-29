@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 
 import { FaArrowCircleUp } from "react-icons/fa"
-import { Transition } from "react-spring/renderprops"
+import { Transition } from "react-spring"
 
 import "./ScrollButton.css"
 

@@ -77,11 +77,10 @@ const PlaylistTracks = (props) => {
 
   if (loading) return <Loading />
 
-  console.log(tracks)
   return (
-    <div>
-      {genresSelected[0] !== "" ? (
-        <div className="row">
+    <>
+      <div className="row">
+        {genresSelected[0] !== "" ? (
           <div className="col-12 col-sm-6">
             <Button
               onClick={() => selectGenre([""])}
@@ -91,21 +90,7 @@ const PlaylistTracks = (props) => {
               Déselectionner le genre
             </Button>
           </div>
-          <div className="col-12 col-sm-6 mx-auto">
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text>Genre Choisi</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                id="inputGenre"
-                onChange={handleChangeInput}
-                value={genresSelected[0]}
-              />
-            </InputGroup>
-          </div>
-        </div>
-      ) : (
-        <div className="row">
+        ) : (
           <Dropdown className="mb-2 col-12 col-sm-6">
             <Dropdown.Toggle variant="success">
               Selectionner un genre
@@ -120,19 +105,17 @@ const PlaylistTracks = (props) => {
               })}
             </Dropdown.Menu>
           </Dropdown>
-          <div className="col-12 col-sm-6">
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text>Genre Choisi</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                onChange={handleChangeInput}
-                value={genresSelected[0]}
-              />
-            </InputGroup>
-          </div>
+        )}
+        <div className="col-12 col-sm-6">
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Genre choisi : </InputGroup.Text>
+            <FormControl
+              onChange={handleChangeInput}
+              value={genresSelected[0]}
+            />
+          </InputGroup>
         </div>
-      )}
+      </div>
       <ListGroup className="shadow">
         {tracks &&
           tracks.map((track) => {
@@ -149,7 +132,7 @@ const PlaylistTracks = (props) => {
             return null
           })}
       </ListGroup>
-    </div>
+    </>
   )
 }
 

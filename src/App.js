@@ -42,8 +42,8 @@ const App = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setNewToken(hash.access_token)
-    
+    if (hash.access_token !== token) setNewToken(hash.access_token)
+
     window.addEventListener("offline", () => {
       setOnline(false)
       console.log("offline")
@@ -71,7 +71,7 @@ const App = () => {
       setLoading(false)
     }
     window.location.hash = ""
-  }, [token])
+  }, [token, online, setNewToken])
 
   const choosePlaylist = (playlistC) => {
     setPlaylistChoosen(playlistC)
